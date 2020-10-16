@@ -1,11 +1,8 @@
-import { AxiosStatic } from 'axios';
+import { AxiosInstance } from 'axios';
 
 import { PermanentApiData, RequestVO } from '../model';
 
 import { CsrfStore } from './csrf';
-
-export const SESSION_COOKIE = 'permSession';
-export const MFA_COOKIE = 'permMFA';
 
 export interface PermanentApiRequestI {
   RequestVO: RequestVO;
@@ -20,32 +17,20 @@ export interface PermanentApiResponse {
 }
 
 export interface RepoConstructorConfig {
-  sessionToken: string;
-  mfaToken: string;
   csrfStore: CsrfStore;
-  axios: AxiosStatic;
+  axiosInstance: AxiosInstance;
   apiKey: string;
-  baseUrl?: string;
 }
 
 export class BaseRepo {
-  private sessionToken = '';
-  private mfaToken = '';
   private csrfStore: CsrfStore;
-  private axios: AxiosStatic;
+  private axiosInstance: AxiosInstance;
   private apiKey: string;
-  private baseUrl = 'https://permanent.org/api';
 
   constructor(config: RepoConstructorConfig) {
-    this.sessionToken = config.sessionToken;
-    this.mfaToken = config.mfaToken;
     this.csrfStore = config.csrfStore;
-    this.axios = config.axios;
+    this.axiosInstance = config.axiosInstance;
     this.apiKey = config.apiKey;
-
-    if (config.baseUrl) {
-      this.baseUrl = config.baseUrl;
-    }
   }
 
   async request(
@@ -59,15 +44,7 @@ export class BaseRepo {
         csrf: this.csrfStore.getCsrf(),
       },
     };
-    const response = await this.axios.post(
-      `${this.baseUrl}${endpoint}`,
-      requestData,
-      {
-        headers: {
-          Cookie: `${SESSION_COOKIE}=${this.sessionToken}; ${MFA_COOKIE}=${this.mfaToken};`,
-        },
-      }
-    );
+    const response = await this.axiosInstance.post(endpoint, requestData);
 
     if (response.data.csrf) {
       this.csrfStore.setCsrf(response.data.csrf);

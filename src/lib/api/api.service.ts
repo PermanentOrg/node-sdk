@@ -4,25 +4,41 @@ import { AuthRepo } from './auth.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
 
+export const SESSION_COOKIE = 'permSession';
+export const MFA_COOKIE = 'permMFA';
+
 export class ApiService {
   private csrfStore = new CsrfStore();
-  private axios = axios;
+  private axiosInstance = axios.create();
 
   private repoConfig: RepoConstructorConfig = {
-    sessionToken: this.sessionToken,
-    mfaToken: this.mfaToken,
     csrfStore: this.csrfStore,
-    axios: this.axios,
+    axiosInstance: this.axiosInstance,
     apiKey: this.apiKey,
-    baseUrl: this.baseUrl,
   };
 
   public auth = new AuthRepo(this.repoConfig);
 
   constructor(
-    private sessionToken: string,
-    private mfaToken: string,
+    sessionToken: string,
+    mfaToken: string,
     private apiKey: string,
-    private baseUrl = 'https://permanent.org/api'
-  ) {}
+    baseUrl = 'https://permanent.org/api'
+  ) {
+    this.axiosInstance.defaults.headers = createDefaultHeaders(
+      sessionToken,
+      mfaToken
+    );
+    this.axiosInstance.defaults.baseURL = baseUrl;
+  }
+
+  getAxiosInstance() {
+    return this.axiosInstance;
+  }
+}
+
+function createDefaultHeaders(sessionToken: string, mfaToken: string) {
+  return {
+    Cookie: `${SESSION_COOKIE}=${sessionToken}; ${MFA_COOKIE}=${mfaToken};`,
+  };
 }

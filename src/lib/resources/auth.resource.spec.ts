@@ -40,7 +40,7 @@ test('returns true for valid session', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isLoggedIn();
+  const isLoggedIn = await t.context.auth.isSessionValid();
 
   t.assert(isLoggedIn);
 });
@@ -66,7 +66,7 @@ test('returns false for invalid session', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isLoggedIn();
+  const isLoggedIn = await t.context.auth.isSessionValid();
 
   t.assert(!isLoggedIn);
 });
@@ -85,7 +85,7 @@ test('returns false for response.isSuccessful = false', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isLoggedIn();
+  const isLoggedIn = await t.context.auth.isSessionValid();
 
   t.assert(!isLoggedIn);
 });
@@ -94,7 +94,7 @@ test('returns false for errored request', async (t) => {
   const responseFake = sinon.fake.throws(new Error('error'));
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isLoggedIn();
+  const isLoggedIn = await t.context.auth.isSessionValid();
 
   t.assert(!isLoggedIn);
 });

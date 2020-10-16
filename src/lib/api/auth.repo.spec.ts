@@ -10,23 +10,18 @@ const test = anyTest as TestInterface<{
   csrfStore: CsrfStore;
 }>;
 
-const baseUrl = 'http://test.com';
 const apiKey = 'apiKey';
-const sessionToken = 'sessionToken';
-const mfaToken = 'mfaToken';
 
 test.beforeEach('New BaseRepo', (t) => {
   const csrfStore = new CsrfStore();
+  const axiosInstance = axios.create();
 
   t.context = {
     csrfStore,
     authRepo: new AuthRepo({
-      sessionToken,
-      mfaToken,
       csrfStore,
-      axios,
+      axiosInstance,
       apiKey,
-      baseUrl,
     }),
   };
 });
