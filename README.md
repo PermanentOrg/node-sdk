@@ -4,7 +4,7 @@ Node.js SDK for Permanent.org
 
 Built on [bitjson/typescript-starter](https://github.com/bitjson/typescript-starter)
 
-
+![Unit tests](https://github.com/PermanentOrg/node-sdk/workflows/Unit%20tests/badge.svg?branch=main)
 ## Developing
 To start working, run the `watch:build` task using [`npm`](https://docs.npmjs.com/getting-started/what-is-npm) or [`yarn`](https://yarnpkg.com/).
 
