@@ -17,3 +17,10 @@ In another terminal tab/window, run the `watch:test` task:
 ```sh
 npm run watch:test
 ```
+
+## Testing
+To run all tests (unit tests, formatting, linting), run the `test` task:
+
+```sh
+npm run test
+```
