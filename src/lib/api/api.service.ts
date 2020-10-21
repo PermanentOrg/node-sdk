@@ -4,6 +4,7 @@ import { ArchiveRepo } from './archive.repo';
 import { AuthRepo } from './auth.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
+import { FolderRepo } from './folder.repo';
 
 export const SESSION_COOKIE = 'permSession';
 export const MFA_COOKIE = 'permMFA';
@@ -20,6 +21,7 @@ export class ApiService {
 
   public auth = new AuthRepo(this.repoConfig);
   public archive = new ArchiveRepo(this.repoConfig);
+  public folder = new FolderRepo(this.repoConfig);
 
   constructor(
     sessionToken: string,

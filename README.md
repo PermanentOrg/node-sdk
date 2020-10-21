@@ -22,7 +22,7 @@ const permanent = new Permanent({
   sessionToken,
   mfaToken,
   accountId,
-  archiveId,
+  archiveNbr,
 });
 
 // Ready to use!

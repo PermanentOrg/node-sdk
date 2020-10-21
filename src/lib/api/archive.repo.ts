@@ -1,12 +1,22 @@
 import { PermanentApiData } from '../model';
-import { ArchiveVO } from '../model/archive-vo';
 
 import { BaseRepo } from './base.repo';
 
 export class ArchiveRepo extends BaseRepo {
-  public change(archive: ArchiveVO) {
+  public getByArchiveNbr(archiveNbr: string) {
     const requestData: PermanentApiData = {
-      ArchiveVO: archive,
+      ArchiveVO: {
+        archiveNbr,
+      },
+    };
+    return this.request('/archive/getByArchiveNbr', [requestData]);
+  }
+
+  public change(archiveNbr: string) {
+    const requestData: PermanentApiData = {
+      ArchiveVO: {
+        archiveNbr,
+      },
     };
     return this.request('/archive/change', [requestData]);
   }

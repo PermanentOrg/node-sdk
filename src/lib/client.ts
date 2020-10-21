@@ -6,7 +6,7 @@ export interface PermanentConstructorConfigI {
   sessionToken: string;
   mfaToken: string;
   accountId: number;
-  archiveId: number;
+  archiveNbr: string;
 }
 
 export class Permanent {
@@ -14,7 +14,7 @@ export class Permanent {
   private sessionToken: string | undefined;
   private mfaToken: string | undefined;
   private accountId: number | undefined;
-  private archiveId: number | undefined;
+  private archiveNbr: string | undefined;
 
   private api: ApiService;
 
@@ -22,12 +22,12 @@ export class Permanent {
 
   private archiveStore: ArchiveStore;
   constructor(config: PermanentConstructorConfigI) {
-    const { sessionToken, mfaToken, accountId, archiveId } = config;
-    Object.assign(this, { sessionToken, mfaToken, accountId, archiveId });
+    const { sessionToken, mfaToken, accountId, archiveNbr } = config;
+    Object.assign(this, { sessionToken, mfaToken, accountId, archiveNbr });
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey);
     this.archiveStore = new ArchiveStore(this.api);
 
-    this.auth = new AuthResource(this.api);
+    this.auth = new AuthResource(this.api, this.archiveStore);
   }
 
   public getSessionToken() {
@@ -42,7 +42,7 @@ export class Permanent {
     return this.accountId;
   }
 
-  public getArchiveId() {
-    return this.archiveId;
+  public getArchiveNbr() {
+    return this.archiveNbr;
   }
 }

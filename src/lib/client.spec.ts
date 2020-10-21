@@ -7,7 +7,7 @@ test('instance gets config options', (t) => {
     sessionToken: 'googoogaga',
     mfaToken: 'mfamfamfa',
     accountId: 1,
-    archiveId: 555,
+    archiveNbr: '0001-0000',
   };
 
   const client = new Permanent(clientOptions);
@@ -16,5 +16,5 @@ test('instance gets config options', (t) => {
   t.is(client.getSessionToken(), clientOptions.sessionToken);
   t.is(client.getMfaToken(), clientOptions.mfaToken);
   t.is(client.getAccountId(), clientOptions.accountId);
-  t.is(client.getArchiveId(), clientOptions.archiveId);
+  t.is(client.getArchiveNbr(), clientOptions.archiveNbr);
 });

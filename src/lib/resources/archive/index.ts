@@ -1,9 +1,10 @@
 import { ApiService } from '../../api/api.service';
+import { FolderVO } from '../../model';
 import { ArchiveVO } from '../../model/archive-vo';
 
 export class ArchiveStore {
   private archive: ArchiveVO | undefined;
-  private root: unknown | undefined;
+  private root: FolderVO | undefined;
 
   private setupPromise: Promise<void>;
 
@@ -22,6 +23,10 @@ export class ArchiveStore {
     }
   }
 
+  public waitForSetup() {
+    return this.setupPromise;
+  }
+
   setArchive(archive: ArchiveVO) {
     this.archive = archive;
   }
@@ -30,7 +35,7 @@ export class ArchiveStore {
     return this.archive;
   }
 
-  setRoot(root: unknown) {
+  setRoot(root: FolderVO) {
     this.root = root;
   }
 

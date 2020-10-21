@@ -1,9 +1,7 @@
-import { AccountVO } from './account-vo';
-import { ArchiveVO } from './archive-vo';
-import { SimpleVO } from './simple-vo';
+import { AccountVO, ArchiveVO, FolderVO, SimpleVO } from '.';
 
 export interface PermanentApiData {
-  FolderVO?: unknown;
+  FolderVO?: FolderVO;
   RecordVO?: unknown;
   ArchiveVO?: ArchiveVO;
   AccountVO?: AccountVO;
