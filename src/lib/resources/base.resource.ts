@@ -1,5 +1,7 @@
 import { ApiService } from '../api/api.service';
 
+import { AccountStore } from './account/account.store';
+
 export class BaseResource {
-  constructor(public api: ApiService) {}
+  constructor(public api: ApiService, public accountStore?: AccountStore) {}
 }

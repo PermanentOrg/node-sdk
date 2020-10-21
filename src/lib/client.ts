@@ -1,4 +1,5 @@
 import { ApiService } from './api/api.service';
+import { AccountStore } from './resources/account';
 import { AuthResource } from './resources/auth.resource';
 
 export interface PermanentConstructorConfigI {
@@ -16,6 +17,8 @@ export class Permanent {
   private archiveId: number | undefined;
 
   private api: ApiService;
+
+  private accountStore = new AccountStore();
 
   public auth: AuthResource;
   constructor(config: PermanentConstructorConfigI) {
