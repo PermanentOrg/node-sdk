@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { ArchiveRepo } from './archive.repo';
 import { AuthRepo } from './auth.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
@@ -18,6 +19,7 @@ export class ApiService {
   };
 
   public auth = new AuthRepo(this.repoConfig);
+  public archive = new ArchiveRepo(this.repoConfig);
 
   constructor(
     sessionToken: string,

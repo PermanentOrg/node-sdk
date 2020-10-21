@@ -1,4 +1,5 @@
 import { ApiService } from './api/api.service';
+import { ArchiveStore } from './resources/archive';
 import { AuthResource } from './resources/auth.resource';
 
 export interface PermanentConstructorConfigI {
@@ -18,10 +19,13 @@ export class Permanent {
   private api: ApiService;
 
   public auth: AuthResource;
+
+  private archiveStore: ArchiveStore;
   constructor(config: PermanentConstructorConfigI) {
     const { sessionToken, mfaToken, accountId, archiveId } = config;
     Object.assign(this, { sessionToken, mfaToken, accountId, archiveId });
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey);
+    this.archiveStore = new ArchiveStore(this.api);
 
     this.auth = new AuthResource(this.api);
   }
