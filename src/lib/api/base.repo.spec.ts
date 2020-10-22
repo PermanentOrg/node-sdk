@@ -2,7 +2,7 @@ import anyTest, { TestInterface } from 'ava';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import { PermanentApiData } from '../model';
+import { PermanentApiRequestData } from '../model';
 
 import { BaseRepo, PermanentApiRequest } from './base.repo';
 import { CsrfStore } from './csrf';
@@ -73,7 +73,9 @@ test('CsrfStore is updated with csrf from response', async (t) => {
 });
 
 test('requests are made with provided data', async (t) => {
-  const data: PermanentApiData[] = [{ FolderVO: { folderId: 1, folder_linkId: 2 } }];
+  const data: PermanentApiRequestData[] = [
+    { FolderVO: { folderId: 1, folder_linkId: 2 } },
+  ];
   const endpoint = '/endpoint';
 
   t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce((config) => {

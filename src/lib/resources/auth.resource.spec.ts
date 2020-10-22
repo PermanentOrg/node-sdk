@@ -103,8 +103,11 @@ test('returns false for errored request', async (t) => {
   t.assert(!isLoggedIn);
 });
 
-test('set archive and root in ArchiveStore after successful request', async (t) => {
+test('set archive and root in ArchiveStore after successful archive change request', async (t) => {
+  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
+
   const archiveNbr = '0003-0000';
+
   const changeArchiveResponse: PermanentApiResponse = {
     csrf: 'csrf',
     isSuccessful: true,
@@ -136,7 +139,7 @@ test('set archive and root in ArchiveStore after successful request', async (t) 
           {
             FolderVO: {
               folderId,
-              folder_linkId: folderId
+              folder_linkId: folderId,
             },
           },
         ],
@@ -150,10 +153,15 @@ test('set archive and root in ArchiveStore after successful request', async (t) 
   await t.context.auth.useArchive(archiveNbr);
 
   t.is(t.context.archiveStore.getArchive()?.archiveNbr, archiveNbr);
-  t.deepEqual(t.context.archiveStore.getRoot(), { folderId, folder_linkId: folderId });
+  t.deepEqual(t.context.archiveStore.getRoot(), {
+    folderId,
+    folder_linkId: folderId,
+  });
 });
 
 test('throw error on change if failed request', async (t) => {
+  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
+
   const archiveNbr = '0003-0000';
   const changeArchiveResponse: PermanentApiResponse = {
     csrf: 'csrf',

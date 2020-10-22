@@ -39,7 +39,7 @@ export class AuthResource extends BaseResource {
   /**
    * Set the current client instance to use a given archive when making any subsequent requests.
    *
-   * *Note: This is done automatically when creating a client instance.*
+   * *Note: This is done automatically when calling `perm.init()`*
    *
    *
    * #### Example
@@ -51,9 +51,17 @@ export class AuthResource extends BaseResource {
    * @returns a Promise that resolves to a boolean representing whether or not the credentials are valid
    */
   public async useArchive(archiveNbr: string): Promise<void> {
+    const isLoggedIn = await this.isSessionValid();
+    if (!isLoggedIn) {
+      throw new PermSdkError(`Credentials invalid`);
+    }
+
     const archiveResponse = await this.api.archive.change(archiveNbr);
     if (!archiveResponse.isSuccessful) {
-      throw new PermSdkError(`Could not use archive ${archiveNbr}`);
+      throw new PermSdkError(
+        `Could not use archive ${archiveNbr}`,
+        archiveResponse.Results[0].message
+      );
     }
 
     const archive = archiveResponse.Results[0].data[0].ArchiveVO;

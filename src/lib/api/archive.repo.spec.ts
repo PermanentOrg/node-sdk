@@ -2,7 +2,7 @@ import anyTest, { TestInterface } from 'ava';
 import axios from 'axios';
 import * as sinon from 'sinon';
 
-import { PermanentApiData } from '../model';
+import { PermanentApiRequestData } from '../model';
 
 import { ArchiveRepo } from './archive.repo';
 import { CsrfStore } from './csrf';
@@ -36,7 +36,7 @@ test('should call getByArchiveNbr endpoint with ArchiveVO', async (t) => {
   const requestFake = sinon.fake.resolves(true);
   const archiveNbr = '0001-0000';
 
-  const expectedRequestData: PermanentApiData[] = [
+  const expectedRequestData: PermanentApiRequestData[] = [
     {
       ArchiveVO: {
         archiveNbr,
@@ -57,7 +57,7 @@ test('should call change endpoint with ArchiveVO', async (t) => {
   const requestFake = sinon.fake.resolves(true);
   const archiveNbr = '0001-0000';
 
-  const expectedRequestData: PermanentApiData[] = [
+  const expectedRequestData: PermanentApiRequestData[] = [
     {
       ArchiveVO: {
         archiveNbr,

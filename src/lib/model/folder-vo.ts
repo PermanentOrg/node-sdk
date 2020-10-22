@@ -18,5 +18,13 @@ export interface FolderVO extends BaseVO {
   folderId: number;
   type?: FolderType;
 
+  archiveNbr?: string;
+  archiveId?: number;
+
+  displayName?: string;
+
+  parentFolderId?: number;
+  parentFolder_linkId?: number;
+
   ChildItemVOs?: FolderVO[];
 }

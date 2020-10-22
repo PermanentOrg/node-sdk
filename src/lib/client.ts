@@ -15,11 +15,11 @@ export class Permanent {
   private mfaToken: string;
   private archiveNbr: string;
 
-  private api: ApiService;
+  public api: ApiService;
 
   public auth: AuthResource;
 
-  private archiveStore = new ArchiveStore();
+  public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
     const { sessionToken, mfaToken, archiveNbr, apiKey } = config;
 
