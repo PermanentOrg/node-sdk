@@ -19,7 +19,7 @@ export class Permanent {
 
   public auth: AuthResource;
 
-  private archiveStore: ArchiveStore;
+  private archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
     const { sessionToken, mfaToken, archiveNbr, apiKey } = config;
 
@@ -27,9 +27,14 @@ export class Permanent {
     this.mfaToken = mfaToken;
     this.archiveNbr = archiveNbr;
     this.apiKey = apiKey;
+
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey);
-    this.archiveStore = new ArchiveStore(this.api);
-    this.auth = new AuthResource(this.api);
+
+    this.auth = new AuthResource(this.api, this.archiveStore);
+  }
+
+  public async init() {
+    await this.auth.useArchive(this.archiveNbr);
   }
 
   public getSessionToken() {

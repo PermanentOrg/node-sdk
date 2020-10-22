@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { PermanentApiData } from '../model';
 
-import { BaseRepo, PermanentApiRequestI } from './base.repo';
+import { BaseRepo, PermanentApiRequest } from './base.repo';
 import { CsrfStore } from './csrf';
 
 const test = anyTest as TestInterface<{
@@ -38,7 +38,7 @@ test('requests are made using API key', async (t) => {
   const endpoint = '/endpoint';
 
   t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce((config) => {
-    const requestData = JSON.parse(config.data) as PermanentApiRequestI;
+    const requestData = JSON.parse(config.data) as PermanentApiRequest;
     t.is(requestData.RequestVO.apiKey, apiKey);
     return [200, {}];
   });
@@ -51,7 +51,7 @@ test('requests are made using csrf from CsrfStore', async (t) => {
 
   t.context.csrfStore.setCsrf('testCsrf');
   t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce((config) => {
-    const requestData = JSON.parse(config.data) as PermanentApiRequestI;
+    const requestData = JSON.parse(config.data) as PermanentApiRequest;
     t.is(requestData.RequestVO.csrf, t.context.csrfStore.getCsrf());
     return [200, {}];
   });
@@ -73,11 +73,11 @@ test('CsrfStore is updated with csrf from response', async (t) => {
 });
 
 test('requests are made with provided data', async (t) => {
-  const data: PermanentApiData[] = [{ FolderVO: null }];
+  const data: PermanentApiData[] = [{ FolderVO: { folderId: 1, folder_linkId: 2 } }];
   const endpoint = '/endpoint';
 
   t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce((config) => {
-    const requestData = JSON.parse(config.data) as PermanentApiRequestI;
+    const requestData = JSON.parse(config.data) as PermanentApiRequest;
     t.deepEqual(requestData.RequestVO.data, data);
     return [200, {}];
   });
