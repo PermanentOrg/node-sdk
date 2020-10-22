@@ -17,4 +17,6 @@ export interface FolderVO extends BaseVO {
   folder_linkId: number;
   folderId: number;
   type?: FolderType;
+
+  ChildItemVOs?: FolderVO[];
 }

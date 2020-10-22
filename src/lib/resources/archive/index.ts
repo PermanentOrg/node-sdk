@@ -19,4 +19,14 @@ export class ArchiveStore {
   getRoot() {
     return this.root;
   }
+
+  getPrivateRoot() {
+    if (!this.root || !this.root.ChildItemVOs) {
+      return undefined;
+    }
+
+    const [ privateRoot ] = this.root.ChildItemVOs.filter(f => f.type === 'type.folder.root.private');
+
+    return privateRoot;
+  }
 }
