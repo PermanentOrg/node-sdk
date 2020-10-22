@@ -4,7 +4,7 @@ import { PermanentApiData, RequestVO } from '../model';
 
 import { CsrfStore } from './csrf';
 
-export interface PermanentApiRequestI {
+export interface PermanentApiRequest {
   RequestVO: RequestVO;
 }
 
@@ -37,7 +37,7 @@ export class BaseRepo {
     endpoint: string,
     data: PermanentApiData[] = [{}]
   ): Promise<PermanentApiResponse> {
-    const requestData: PermanentApiRequestI = {
+    const requestData: PermanentApiRequest = {
       RequestVO: {
         data,
         apiKey: this.apiKey,

@@ -27,9 +27,7 @@ export class AuthResource extends BaseResource {
     try {
       const response = await this.api.auth.isLoggedIn();
       if (response.isSuccessful) {
-        return response.Results[0].data[0].SimpleVO?.value === true
-          ? true
-          : false;
+        return response.Results[0].data[0].SimpleVO?.value === true;
       } else {
         return false;
       }

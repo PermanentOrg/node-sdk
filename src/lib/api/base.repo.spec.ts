@@ -62,7 +62,7 @@ test('requests are made using csrf from CsrfStore', async (t) => {
 test('CsrfStore is updated with csrf from response', async (t) => {
   const newCsrf = 'newcsrf';
   const endpoint = '/endpoint';
-  t.context.csrfStore.setCsrf('oogabooga');
+  t.context.csrfStore.setCsrf('oldcsrf');
   t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce(() => {
     return [200, { csrf: newCsrf }];
   });

@@ -5,16 +5,15 @@ import { AuthResource } from './resources/auth.resource';
 export interface PermanentConstructorConfigI {
   sessionToken: string;
   mfaToken: string;
-  accountId: number;
   archiveNbr: string;
+  apiKey: string;
 }
 
 export class Permanent {
-  private apiKey = 'Xr$k?fopgA"FdWFoPKmmh6n7';
-  private sessionToken: string | undefined;
-  private mfaToken: string | undefined;
-  private accountId: number | undefined;
-  private archiveNbr: string | undefined;
+  private apiKey: string;
+  private sessionToken: string;
+  private mfaToken: string;
+  private archiveNbr: string;
 
   private api: ApiService;
 
@@ -22,12 +21,15 @@ export class Permanent {
 
   private archiveStore: ArchiveStore;
   constructor(config: PermanentConstructorConfigI) {
-    const { sessionToken, mfaToken, accountId, archiveNbr } = config;
-    Object.assign(this, { sessionToken, mfaToken, accountId, archiveNbr });
+    const { sessionToken, mfaToken, archiveNbr, apiKey } = config;
+
+    this.sessionToken = sessionToken;
+    this.mfaToken = mfaToken;
+    this.archiveNbr = archiveNbr;
+    this.apiKey = apiKey;
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey);
     this.archiveStore = new ArchiveStore(this.api);
-
-    this.auth = new AuthResource(this.api, this.archiveStore);
+    this.auth = new AuthResource(this.api);
   }
 
   public getSessionToken() {
@@ -36,10 +38,6 @@ export class Permanent {
 
   public getMfaToken() {
     return this.mfaToken;
-  }
-
-  public getAccountId() {
-    return this.accountId;
   }
 
   public getArchiveNbr() {
