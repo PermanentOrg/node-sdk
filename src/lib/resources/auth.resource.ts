@@ -62,7 +62,7 @@ export class AuthResource extends BaseResource {
     if (!archiveResponse.isSuccessful) {
       throw new PermSdkError(
         `Could not use archive ${archiveNbr}`,
-        archiveResponse.Results[0].message
+        this.getMessageFromResponse(archiveResponse)
       );
     }
 
@@ -77,7 +77,8 @@ export class AuthResource extends BaseResource {
 
     if (!getRootResponse.isSuccessful) {
       throw new PermSdkError(
-        `Could not get root folder for archive ${archiveNbr}`
+        `Could not get root folder for archive ${archiveNbr}`,
+        this.getMessageFromResponse(getRootResponse)
       );
     }
 

@@ -11,7 +11,9 @@ export class ArchiveRepo extends BaseRepo {
         archiveNbr,
       },
     };
-    return this.request('/archive/getByArchiveNbr', [requestData]);
+    return this.request<ArchiveResponse>('/archive/getByArchiveNbr', [
+      requestData,
+    ]);
   }
 
   public change(archiveNbr: string) {

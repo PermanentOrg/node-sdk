@@ -28,3 +28,5 @@ export interface FolderVO extends BaseVO {
 
   ChildItemVOs?: FolderVO[];
 }
+
+export type Folder = FolderVO;

@@ -13,6 +13,8 @@ export interface RecordVO extends BaseVO {
   parentFolder_linkId: number;
 }
 
+export type Record = RecordVO;
+
 export interface RecordVOFromUrl
   extends Pick<
     RecordVO,

@@ -13,4 +13,8 @@ export class BaseResource {
   ) {
     return response.Results[0].data[0][voName];
   }
+
+  getMessageFromResponse(response: PermanentApiResponse) {
+    return response.Results[0].message;
+  }
 }

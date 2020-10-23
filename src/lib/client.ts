@@ -7,6 +7,7 @@ export interface PermanentConstructorConfigI {
   mfaToken: string;
   archiveNbr: string;
   apiKey: string;
+  baseUrl?: string;
 }
 
 export class Permanent {
@@ -21,14 +22,14 @@ export class Permanent {
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
-    const { sessionToken, mfaToken, archiveNbr, apiKey } = config;
+    const { sessionToken, mfaToken, archiveNbr, apiKey, baseUrl } = config;
 
     this.sessionToken = sessionToken;
     this.mfaToken = mfaToken;
     this.archiveNbr = archiveNbr;
     this.apiKey = apiKey;
 
-    this.api = new ApiService(sessionToken, mfaToken, this.apiKey);
+    this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
 
     this.auth = new AuthResource(this.api, this.archiveStore);
   }
