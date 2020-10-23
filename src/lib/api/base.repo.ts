@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 
 import {
   PermanentApiRequestData,
-  PermanentApiResponseData,
+  PermanentApiResponseDataBase,
   RequestVO,
 } from '../model';
 
@@ -12,14 +12,13 @@ export interface PermanentApiRequest {
   RequestVO: RequestVO;
 }
 
-export interface PermanentApiResponse {
+export interface PermanentApiResponse<T = PermanentApiResponseDataBase> {
   isSuccessful: boolean;
   isSystemUp: boolean;
-  Results: { data: PermanentApiResponseData[]; message?: string[] }[];
+  Results: { data: T[]; message?: string[] }[];
   csrf: string;
   sessionId?: string;
 }
-
 export interface RepoConstructorConfig {
   csrfStore: CsrfStore;
   axiosInstance: AxiosInstance;
@@ -37,10 +36,12 @@ export class BaseRepo {
     this.apiKey = config.apiKey;
   }
 
-  async request(
+  async request<
+    T extends PermanentApiResponseDataBase = PermanentApiResponseDataBase
+  >(
     endpoint: string,
     data: PermanentApiRequestData[] = [{}]
-  ): Promise<PermanentApiResponse> {
+  ): Promise<PermanentApiResponse<T>> {
     const requestBody: PermanentApiRequest = {
       RequestVO: {
         apiKey: this.apiKey,

@@ -1,6 +1,8 @@
-import { PermanentApiRequestData } from '../model';
+import { PermanentApiRequestData, PermanentApiResponseData } from '../model';
 
 import { BaseRepo } from './base.repo';
+
+export type ArchiveResponse = PermanentApiResponseData<'ArchiveVO'>;
 
 export class ArchiveRepo extends BaseRepo {
   public getByArchiveNbr(archiveNbr: string) {
@@ -18,6 +20,7 @@ export class ArchiveRepo extends BaseRepo {
         archiveNbr,
       },
     };
-    return this.request('/archive/change', [requestData]);
+
+    return this.request<ArchiveResponse>('/archive/change', [requestData]);
   }
 }

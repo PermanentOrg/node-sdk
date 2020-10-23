@@ -2,7 +2,7 @@ import { RecordVO } from './record-vo';
 
 import { AccountVO, ArchiveVO, FolderVO, ShareByUrlVO, SimpleVO } from '.';
 
-export interface PermanentApiResponseData {
+export interface PermanentApiResponseDataBase {
   FolderVO?: FolderVO;
   RecordVO?: RecordVO;
   ArchiveVO?: ArchiveVO;
@@ -10,6 +10,10 @@ export interface PermanentApiResponseData {
   SimpleVO?: SimpleVO;
   ShareByUrlVO?: ShareByUrlVO;
 }
+
+export type PermanentApiResponseData<
+  T extends keyof PermanentApiResponseDataBase
+> = Required<Pick<PermanentApiResponseDataBase, T>>;
 
 export interface PermanentApiRequestData {
   FolderVO?: Partial<FolderVO>;

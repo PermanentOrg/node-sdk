@@ -1,17 +1,32 @@
-import { PermanentApiRequestData } from '../model';
+import {
+  FolderVO,
+  PermanentApiRequestData,
+  PermanentApiResponseData,
+  RecordVO,
+} from '../model';
 
 import { BaseRepo } from './base.repo';
 
+export type ShareByUrlResponse = PermanentApiResponseData<'ShareByUrlVO'>;
+
 export class ShareRepo extends BaseRepo {
-  public generateShareLink(folder_linkId: number, forFolder = false) {
-    const requestData: PermanentApiRequestData = {};
+  public generateRecordShareLink(record: Pick<RecordVO, 'folder_linkId'>) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: record,
+    };
 
-    if (forFolder) {
-      requestData.FolderVO = { folder_linkId };
-    } else {
-      requestData.RecordVO = { folder_linkId };
-    }
+    return this.request<ShareByUrlResponse>('/share/generateShareLink', [
+      requestData,
+    ]);
+  }
 
-    return this.request('/share/generateShareLink', [requestData]);
+  public generateFolderShareLink(folder: Pick<FolderVO, 'folder_linkId'>) {
+    const requestData: PermanentApiRequestData = {
+      FolderVO: folder,
+    };
+
+    return this.request<ShareByUrlResponse>('/share/generateShareLink', [
+      requestData,
+    ]);
   }
 }

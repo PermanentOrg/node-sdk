@@ -1,3 +1,4 @@
+import { RecordResponse } from '../api/record.repo';
 import { PermSdkError } from '../error';
 import { RecordVOFromUrl } from '../model';
 
@@ -19,15 +20,6 @@ export class RecordResource extends BaseResource {
       );
     }
 
-    const record = response.Results[0].data[0].RecordVO;
-
-    if (record !== undefined) {
-      return record;
-    } else {
-      throw new PermSdkError(
-        'record could not be created',
-        response.Results[0].message
-      );
-    }
+    return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
 }

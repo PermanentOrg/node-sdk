@@ -1,6 +1,12 @@
-import { PermanentApiRequestData, RecordVOFromUrl } from '../model';
+import {
+  PermanentApiRequestData,
+  PermanentApiResponseData,
+  RecordVOFromUrl,
+} from '../model';
 
 import { BaseRepo } from './base.repo';
+
+export type RecordResponse = PermanentApiResponseData<'RecordVO'>;
 
 export class RecordRepo extends BaseRepo {
   public post(
@@ -21,6 +27,6 @@ export class RecordRepo extends BaseRepo {
       RecordVO: record,
     };
 
-    return this.request('/record/post', [requestData]);
+    return this.request<RecordResponse>('/record/post', [requestData]);
   }
 }

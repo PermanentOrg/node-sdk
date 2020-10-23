@@ -1,4 +1,6 @@
 import { ApiService } from '../api/api.service';
+import { ArchiveResponse } from '../api/archive.repo';
+import { FolderResponse } from '../api/folder.repo';
 import { PermSdkError } from '../error';
 
 import { ArchiveStore } from './archive';
@@ -27,7 +29,7 @@ export class AuthResource extends BaseResource {
     try {
       const response = await this.api.auth.isLoggedIn();
       if (response.isSuccessful) {
-        return response.Results[0].data[0].SimpleVO?.value === true;
+        return response.Results[0].data[0].SimpleVO.value === true;
       } else {
         return false;
       }
@@ -64,13 +66,12 @@ export class AuthResource extends BaseResource {
       );
     }
 
-    const archive = archiveResponse.Results[0].data[0].ArchiveVO;
+    const archive = this.getVoFromResponse<ArchiveResponse>(
+      archiveResponse,
+      'ArchiveVO'
+    );
 
-    if (archive !== undefined) {
-      this.archiveStore.setArchive(archive);
-    } else {
-      throw new PermSdkError(`Could not use archive ${archiveNbr}`);
-    }
+    this.archiveStore.setArchive(archive);
 
     const getRootResponse = await this.api.folder.getRoot();
 
@@ -80,14 +81,11 @@ export class AuthResource extends BaseResource {
       );
     }
 
-    const rootFolder = getRootResponse.Results[0].data[0].FolderVO;
+    const rootFolder = this.getVoFromResponse<FolderResponse>(
+      getRootResponse,
+      'FolderVO'
+    );
 
-    if (rootFolder !== undefined) {
-      this.archiveStore.setRoot(rootFolder);
-    } else {
-      throw new PermSdkError(
-        `Could not get root folder for archive ${archiveNbr}`
-      );
-    }
+    this.archiveStore.setRoot(rootFolder);
   }
 }
