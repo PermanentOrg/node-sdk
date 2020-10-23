@@ -16,10 +16,8 @@ export interface RecordVO extends BaseVO {
 export type Record = RecordVO;
 
 export interface RecordVOFromUrl
-  extends Pick<
-    RecordVO,
-    'displayName' | 'parentFolder_linkId' | 'uploadFileName'
-  > {
+  extends Pick<RecordVO, 'displayName' | 'uploadFileName'> {
+  parentFolder_linkId?: number;
   uploadUri: string;
   status: 'status.record.only_meta';
 }

@@ -1,3 +1,4 @@
+import { PermSdkError } from '../../error';
 import { ArchiveVO, FolderVO } from '../../model';
 
 export class ArchiveStore {
@@ -22,10 +23,12 @@ export class ArchiveStore {
 
   getPrivateRoot() {
     if (!this.root || !this.root.ChildItemVOs) {
-      return undefined;
+      throw new PermSdkError('call init() before use');
     }
 
-    const [ privateRoot ] = this.root.ChildItemVOs.filter(f => f.type === 'type.folder.root.private');
+    const [privateRoot] = this.root.ChildItemVOs.filter(
+      (f) => f.type === 'type.folder.root.private'
+    );
 
     return privateRoot;
   }
