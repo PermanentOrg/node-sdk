@@ -36,7 +36,7 @@ test('should return the new share URL on successful response', async (t) => {
       {
         data: [
           {
-            ShareByUrlVO: {
+            Shareby_urlVO: {
               shareUrl: expectedShareUrl,
               shareby_urlId: 1,
               folder_linkId,

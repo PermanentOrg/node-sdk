@@ -11,6 +11,23 @@ export class RecordResource extends BaseResource {
     super(api, archiveStore);
   }
 
+  /**
+   * Uploads a file accessible from a public URL to the current archive
+   *
+   * #### Example
+   * ```js
+   * const perm = new Permanent(config);
+   *
+   * const record = await perm.record.uploadFromUrl({
+   *   displayName: 'Visible name in the system',
+   *   uploadFileName: 'actual_file_name.jpg',
+   *   parentFolder_linkId: 50 // or leave unspecified to upload to the private root
+   *   uploadUri: 'https://www.myfile.com/images/3093400210'
+   * })
+   * ```
+   *
+   * @returns a Promise that resolves to the newly created record
+   */
   public async uploadFromUrl(fileData: Omit<RecordVOFromUrl, 'status'>) {
     const privateRoot = this.archiveStore.getPrivateRoot();
     const parentFolder_linkId =

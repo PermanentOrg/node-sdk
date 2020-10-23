@@ -7,7 +7,7 @@ import {
 
 import { BaseRepo } from './base.repo';
 
-export type ShareByUrlResponse = PermanentApiResponseData<'ShareByUrlVO'>;
+export type ShareByUrlResponse = PermanentApiResponseData<'Shareby_urlVO'>;
 
 export class ShareRepo extends BaseRepo {
   public generateRecordShareLink(record: Pick<RecordVO, 'folder_linkId'>) {

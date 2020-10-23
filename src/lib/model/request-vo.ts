@@ -8,7 +8,7 @@ export interface PermanentApiResponseDataBase {
   ArchiveVO?: ArchiveVO;
   AccountVO?: AccountVO;
   SimpleVO?: SimpleVO;
-  ShareByUrlVO?: ShareByUrlVO;
+  Shareby_urlVO?: ShareByUrlVO;
 }
 
 export type PermanentApiResponseData<
@@ -21,7 +21,7 @@ export interface PermanentApiRequestData {
   ArchiveVO?: Partial<ArchiveVO>;
   AccountVO?: Partial<AccountVO>;
   SimpleVO?: Partial<SimpleVO>;
-  ShareByUrlVO?: Partial<ShareByUrlVO>;
+  Shareby_urlVO?: Partial<ShareByUrlVO>;
 }
 
 export interface RequestVO {
