@@ -6,6 +6,8 @@ export interface RecordVO extends BaseVO {
   archiveNbr: string;
   displayName: string;
 
+  folder_linkId: number;
+
   uploadFileName?: string;
   parentFolderId?: number;
   parentFolder_linkId?: number;

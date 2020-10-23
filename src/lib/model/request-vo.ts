@@ -1,13 +1,14 @@
 import { RecordVO } from './record-vo';
 
-import { AccountVO, ArchiveVO, FolderVO, SimpleVO } from '.';
+import { AccountVO, ArchiveVO, FolderVO, ShareByUrlVO, SimpleVO } from '.';
 
 export interface PermanentApiResponseData {
   FolderVO?: FolderVO;
-  RecordVO?: unknown;
+  RecordVO?: RecordVO;
   ArchiveVO?: ArchiveVO;
   AccountVO?: AccountVO;
   SimpleVO?: SimpleVO;
+  ShareByUrlVO?: ShareByUrlVO;
 }
 
 export interface PermanentApiRequestData {
@@ -16,6 +17,7 @@ export interface PermanentApiRequestData {
   ArchiveVO?: Partial<ArchiveVO>;
   AccountVO?: Partial<AccountVO>;
   SimpleVO?: Partial<SimpleVO>;
+  ShareByUrlVO?: Partial<ShareByUrlVO>;
 }
 
 export interface RequestVO {
