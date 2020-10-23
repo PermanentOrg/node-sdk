@@ -3,6 +3,7 @@ import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
 import { PermanentApiResponse } from '../api/base.repo';
+import { PermSdkError } from '../error';
 
 import { ArchiveStore } from './archive';
 import { AuthResource } from './auth.resource';
@@ -163,6 +164,14 @@ test('set archive and root in ArchiveStore after successful archive change reque
   });
 });
 
+test('throw error on change if credentials invalid', async (t) => {
+  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(false));
+
+  const archiveNbr = '0003-0000';
+  const error = await t.throwsAsync(t.context.auth.useArchive(archiveNbr));
+  t.assert(error instanceof PermSdkError);
+});
+
 test('throw error on change if failed request', async (t) => {
   sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
 
@@ -188,5 +197,48 @@ test('throw error on change if failed request', async (t) => {
   sinon.replace(t.context.api.archive, 'change', responseFake);
 
   const error = await t.throwsAsync(t.context.auth.useArchive(archiveNbr));
+  t.assert(error.message.includes(archiveNbr));
+});
+
+test('throw error on change if failed getRoot request', async (t) => {
+  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
+
+  const archiveNbr = '0003-0000';
+  const changeArchiveResponse: PermanentApiResponse = {
+    csrf: 'csrf',
+    isSuccessful: true,
+    isSystemUp: true,
+    Results: [
+      {
+        data: [
+          {
+            ArchiveVO: {
+              archiveNbr,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  const responseFake = sinon.fake.resolves(changeArchiveResponse);
+  sinon.replace(t.context.api.archive, 'change', responseFake);
+
+  const getRootResponse: PermanentApiResponse = {
+    csrf: 'csrf',
+    isSuccessful: false,
+    isSystemUp: true,
+    Results: [
+      {
+        data: [],
+      },
+    ],
+  };
+
+  const getRootResponseFake = sinon.fake.resolves(getRootResponse);
+  sinon.replace(t.context.api.folder, 'getRoot', getRootResponseFake);
+
+  const error = await t.throwsAsync(t.context.auth.useArchive(archiveNbr));
+  t.assert(error.message.includes('root'));
   t.assert(error.message.includes(archiveNbr));
 });
