@@ -1,4 +1,5 @@
 import { ApiService } from './api/api.service';
+import { PermSdkError } from './error';
 import { ArchiveStore } from './resources/archive';
 import { AuthResource } from './resources/auth.resource';
 
@@ -23,6 +24,22 @@ export class Permanent {
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
     const { sessionToken, mfaToken, archiveNbr, apiKey, baseUrl } = config;
+
+    if (!sessionToken) {
+      throw new PermSdkError('Missing sessionToken in config');
+    }
+
+    if (!mfaToken) {
+      throw new PermSdkError('Missing mfaToken in config');
+    }
+
+    if (!archiveNbr) {
+      throw new PermSdkError('Missing archiveNbr in config');
+    }
+
+    if (!apiKey) {
+      throw new PermSdkError('Missing apiKey in config');
+    }
 
     this.sessionToken = sessionToken;
     this.mfaToken = mfaToken;
