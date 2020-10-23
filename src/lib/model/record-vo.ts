@@ -8,15 +8,15 @@ export interface RecordVO extends BaseVO {
 
   folder_linkId: number;
 
-  uploadFileName?: string;
-  parentFolderId?: number;
-  parentFolder_linkId?: number;
+  uploadFileName: string;
+  parentFolderId: number;
+  parentFolder_linkId: number;
 }
 
 export interface RecordVOFromUrl
   extends Pick<
     RecordVO,
-    'displayName' | 'parentFolder_linkId' | 'type' | 'uploadFileName'
+    'displayName' | 'parentFolder_linkId' | 'uploadFileName'
   > {
   uploadUri: string;
   status: 'status.record.only_meta';

@@ -23,6 +23,10 @@ test.beforeEach((t) => {
   };
 });
 
+test('should create', (t) => {
+  t.assert(t.context.auth);
+});
+
 test('returns true for valid session', async (t) => {
   const loggedInResponse: PermanentApiResponse = {
     csrf: 'csrf',
