@@ -1,5 +1,6 @@
 import anyTest, { TestInterface } from 'ava';
 
+import { PermSdkError } from '../../error';
 import { FolderVO } from '../../model';
 
 import { ArchiveStore } from '.';
@@ -46,4 +47,13 @@ test('returns the private root folder', (t) => {
   } else {
     t.fail();
   }
+});
+
+test('throws error if getPrivateRoot called before init()', (t) => {
+  const error = t.throws(() => {
+    t.context.archiveStore.getPrivateRoot();
+  });
+
+  t.assert(error.message.includes('init'));
+  t.assert(error instanceof PermSdkError);
 });
