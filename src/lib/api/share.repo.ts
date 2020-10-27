@@ -3,6 +3,7 @@ import {
   PermanentApiRequestData,
   PermanentApiResponseData,
   RecordVO,
+  ShareByUrlVO,
 } from '../model';
 
 import { BaseRepo } from './base.repo';
@@ -26,6 +27,16 @@ export class ShareRepo extends BaseRepo {
     };
 
     return this.request<ShareByUrlResponse>('/share/generateShareLink', [
+      requestData,
+    ]);
+  }
+
+  public updateShareLink(shareByUrl: ShareByUrlVO) {
+    const requestData: PermanentApiRequestData = {
+      Shareby_urlVO: shareByUrl,
+    };
+
+    return this.request<ShareByUrlResponse>('/share/updateShareLink', [
       requestData,
     ]);
   }
