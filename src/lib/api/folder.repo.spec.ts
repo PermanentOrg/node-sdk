@@ -45,21 +45,19 @@ test('should call getRoot endpoint', async (t) => {
 test('should call post endpoint with proper FolderVO structure', async (t) => {
   const requestFake = sinon.fake.resolves(true);
   const displayName = 'folder name';
-  const parentFolderId = 2;
   const parentFolder_linkId = 3;
 
   const expectedRequestData: PermanentApiRequestData[] = [
     {
       FolderVO: {
         displayName,
-        parentFolderId,
-        parentFolder_linkId
+        parentFolder_linkId,
       },
     },
   ];
 
   sinon.replace(t.context.folderRepo, 'request', requestFake);
-  await t.context.folderRepo.post(displayName, parentFolderId, parentFolder_linkId);
+  await t.context.folderRepo.post(displayName, parentFolder_linkId);
 
   t.assert(requestFake.calledOnceWith('/folder/post', expectedRequestData));
 });

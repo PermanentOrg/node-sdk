@@ -1,5 +1,7 @@
 import { ApiService } from '../api/api.service';
-import { FolderVO } from '../model';
+import { FolderResponse } from '../api/folder.repo';
+import { PermSdkError } from '../error';
+import { FolderVO, ParentFolderVO } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -9,14 +11,38 @@ export class FolderResource extends BaseResource {
     super(api, archiveStore);
   }
 
+  /**
+   * Creates a folder in the current archive
+   *
+   * #### Example
+   * ```js
+   * const perm = new Permanent(config);
+   * const parentFolder = { folder_linkId: 50 };
+   *
+   * const newFolder = await perm.folder.create(
+   *   "Folder Name",
+   *   parentFolder // or leave unspecified to upload to the private root
+   * )
+   * ```
+   *
+   * @returns a Promise that resolves to the newly created folder
+   */
   public async create(
-    name: string,
-    parentFolder: Pick<
-      FolderVO,
-      'folder_linkId'
-    > = this.archiveStore.getPrivateRoot()
-  ): Promise<any> {
-    console.log(name);
-    return parentFolder;
+    displayName: string,
+    parentFolder: ParentFolderVO = this.archiveStore.getPrivateRoot()
+  ): Promise<FolderVO> {
+    const response = await this.api.folder.post(
+      displayName,
+      parentFolder.folder_linkId
+    );
+
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'Folder could not be created!',
+        this.getMessageFromResponse(response)
+      );
+    }
+
+    return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
   }
 }

@@ -17,7 +17,7 @@ export class RecordResource extends BaseResource {
    * #### Example
    * ```js
    * const perm = new Permanent(config);
-   * const targetFolder = { folder_linkId: 50 };
+   * const parentFolder = { folder_linkId: 50 };
    *
    * const record = await perm.record.uploadFromUrl(
    *   {
@@ -25,7 +25,7 @@ export class RecordResource extends BaseResource {
    *     uploadFileName: 'actual_file_name.jpg',
    *     uploadUri: 'https://www.myfile.com/images/3093400210'
    *   },
-   *   targetFolder // or leave unspecified to upload to the private root
+   *   parentFolder // or leave unspecified to upload to the private root
    * )
    * ```
    *

@@ -9,15 +9,10 @@ export class FolderRepo extends BaseRepo {
     return this.request<FolderResponse>('/folder/getRoot');
   }
 
-  public post(
-    displayName: string,
-    parentFolderId: number,
-    parentFolder_linkId: number
-  ) {
+  public post(displayName: string, parentFolder_linkId: number) {
     const requestData: PermanentApiRequestData = {
       FolderVO: {
         displayName,
-        parentFolderId,
         parentFolder_linkId,
       },
     };
