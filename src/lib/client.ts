@@ -2,6 +2,7 @@ import { ApiService } from './api/api.service';
 import { PermSdkError } from './error';
 import { ArchiveStore } from './resources/archive';
 import { AuthResource } from './resources/auth.resource';
+import { FolderResource } from './resources/folder.resource';
 import { RecordResource } from './resources/record.resource';
 import { ShareResource } from './resources/share.resource';
 
@@ -22,6 +23,7 @@ export class Permanent {
   public api: ApiService;
 
   public auth: AuthResource;
+  public folder: FolderResource;
   public record: RecordResource;
   public share: ShareResource;
 
@@ -53,6 +55,7 @@ export class Permanent {
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
 
     this.auth = new AuthResource(this.api, this.archiveStore);
+    this.folder = new FolderResource(this.api, this.archiveStore);
     this.record = new RecordResource(this.api, this.archiveStore);
     this.share = new ShareResource(this.api);
   }
