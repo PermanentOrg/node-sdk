@@ -75,12 +75,14 @@ test('should return the new RecordVO on successful response', async (t) => {
 
   sinon.replace(t.context.api.record, 'post', responseFake);
 
-  const record = await t.context.record.uploadFromUrl({
-    displayName,
-    uploadFileName,
-    uploadUri,
-    parentFolder_linkId,
-  });
+  const record = await t.context.record.uploadFromUrl(
+    {
+      displayName,
+      uploadFileName,
+      uploadUri,
+    },
+    { folder_linkId: parentFolder_linkId }
+  );
 
   t.deepEqual(record, newRecord);
 });
@@ -162,12 +164,14 @@ test('should throw error on unsuccessful response', async (t) => {
   sinon.replace(t.context.api.record, 'post', responseFake);
 
   const error = await t.throwsAsync(
-    t.context.record.uploadFromUrl({
-      displayName,
-      uploadFileName,
-      uploadUri,
-      parentFolder_linkId,
-    })
+    t.context.record.uploadFromUrl(
+      {
+        displayName,
+        uploadFileName,
+        uploadUri,
+      },
+      { folder_linkId: parentFolder_linkId }
+    )
   );
 
   t.assert(error instanceof PermSdkError);
