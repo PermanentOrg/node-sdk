@@ -24,7 +24,7 @@ test('should create', (t) => {
   t.assert(t.context.share);
 });
 
-test('should return the new share URL on successful response', async (t) => {
+test('should return the new share URL on successful record share link response', async (t) => {
   const expectedShareUrl = 'https://share.com';
   const folder_linkId = 1;
 
@@ -57,7 +57,7 @@ test('should return the new share URL on successful response', async (t) => {
   t.is(shareUrl, expectedShareUrl);
 });
 
-test('should throw error on unsuccessful response', async (t) => {
+test('should throw error on unsuccessful record share link response', async (t) => {
   const folder_linkId = 1;
   const errorMessage = 'error.message';
 
@@ -78,6 +78,68 @@ test('should throw error on unsuccessful response', async (t) => {
 
   const error = await t.throwsAsync(
     t.context.share.createRecordShareLink({
+      folder_linkId,
+    })
+  );
+
+  t.assert(error instanceof PermSdkError);
+  t.assert(error.message.includes(errorMessage));
+});
+
+test('should return the new share URL on successful folder share link response', async (t) => {
+  const expectedShareUrl = 'https://share.com';
+  const folder_linkId = 1;
+
+  const fakeResponse: PermanentApiResponse = {
+    csrf: 'csrf',
+    isSuccessful: true,
+    isSystemUp: true,
+    Results: [
+      {
+        data: [
+          {
+            Shareby_urlVO: {
+              shareUrl: expectedShareUrl,
+              shareby_urlId: 1,
+              folder_linkId,
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const responseFake = sinon.fake.resolves(fakeResponse);
+
+  sinon.replace(t.context.api.share, 'generateFolderShareLink', responseFake);
+
+  const shareUrl = await t.context.share.createFolderShareLink({
+    folder_linkId,
+  });
+
+  t.is(shareUrl, expectedShareUrl);
+});
+
+test('should throw error on unsuccessful folder share link response', async (t) => {
+  const folder_linkId = 1;
+  const errorMessage = 'error.message';
+
+  const fakeResponse: PermanentApiResponse = {
+    csrf: 'csrf',
+    isSuccessful: false,
+    isSystemUp: true,
+    Results: [
+      {
+        data: [],
+        message: [errorMessage],
+      },
+    ],
+  };
+  const responseFake = sinon.fake.resolves(fakeResponse);
+
+  sinon.replace(t.context.api.share, 'generateFolderShareLink', responseFake);
+
+  const error = await t.throwsAsync(
+    t.context.share.createFolderShareLink({
       folder_linkId,
     })
   );
