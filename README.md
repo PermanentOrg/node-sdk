@@ -23,6 +23,8 @@ const permanent = new Permanent({
   mfaToken,
   accountId,
   archiveNbr,
+  apiKey,
+  baseUrl, // optional, defaults to production environment URL
 });
 
 // Ready to use!
