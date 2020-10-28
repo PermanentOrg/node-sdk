@@ -27,6 +27,9 @@ const permanent = new Permanent({
   baseUrl, // optional, defaults to production environment URL
 });
 
+// initialize client and session
+await permanent.init();
+
 // Ready to use!
 const isSessionValid = await permanent.auth.isSessionValid();
 ```
