@@ -21,7 +21,6 @@ const Permanent = require('@permanentorg/node-sdk').Permanent;
 const permanent = new Permanent({
   sessionToken,
   mfaToken,
-  accountId,
   archiveNbr,
   apiKey,
   baseUrl, // optional, defaults to production environment URL
