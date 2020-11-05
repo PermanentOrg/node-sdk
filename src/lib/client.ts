@@ -1,5 +1,6 @@
 import { ApiService } from './api/api.service';
 import { PermSdkError } from './error';
+import { ArchiveStore } from './resources/archive';
 import { AuthResource } from './resources/auth.resource';
 
 export interface PermanentConstructorConfigI {
@@ -19,6 +20,8 @@ export class Permanent {
   public api: ApiService;
 
   public auth: AuthResource;
+
+  public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
     const { sessionToken, mfaToken, archiveNbr, apiKey, baseUrl } = config;
 
@@ -43,7 +46,7 @@ export class Permanent {
     this.archiveNbr = archiveNbr;
     this.apiKey = apiKey;
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
-    this.auth = new AuthResource(this.api);
+    this.auth = new AuthResource(this.api, this.archiveStore);
   }
 
   public getSessionToken() {

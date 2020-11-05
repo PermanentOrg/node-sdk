@@ -12,7 +12,7 @@ const test = anyTest as TestInterface<{
 
 const apiKey = 'apiKey';
 
-test.beforeEach('New BaseRepo', (t) => {
+test.beforeEach('New AuthRepo', (t) => {
   const csrfStore = new CsrfStore();
   const axiosInstance = axios.create();
 
