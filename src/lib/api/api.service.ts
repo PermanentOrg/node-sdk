@@ -23,7 +23,7 @@ export class ApiService {
     sessionToken: string,
     mfaToken: string,
     private apiKey: string,
-    baseUrl = 'https://permanent.org/api'
+    baseUrl = 'https://www.permanent.org/api'
   ) {
     this.axiosInstance.defaults.headers = createDefaultHeaders(
       sessionToken,
