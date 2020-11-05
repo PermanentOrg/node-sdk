@@ -1,6 +1,10 @@
 import { AxiosInstance } from 'axios';
 
-import { PermanentApiData, RequestVO } from '../model';
+import {
+  PermanentApiRequestData,
+  PermanentApiResponseDataBase,
+  RequestVO,
+} from '../model';
 
 import { CsrfStore } from './csrf';
 
@@ -8,14 +12,13 @@ export interface PermanentApiRequest {
   RequestVO: RequestVO;
 }
 
-export interface PermanentApiResponse {
+export interface PermanentApiResponse<T = PermanentApiResponseDataBase> {
   isSuccessful: boolean;
   isSystemUp: boolean;
-  Results: { data: PermanentApiData[] }[];
+  Results: { data: T[]; message?: string[] }[];
   csrf: string;
   sessionId?: string;
 }
-
 export interface RepoConstructorConfig {
   csrfStore: CsrfStore;
   axiosInstance: AxiosInstance;
@@ -33,18 +36,27 @@ export class BaseRepo {
     this.apiKey = config.apiKey;
   }
 
-  async request(
+  async request<
+    T extends PermanentApiResponseDataBase = PermanentApiResponseDataBase
+  >(
     endpoint: string,
-    data: PermanentApiData[] = [{}]
-  ): Promise<PermanentApiResponse> {
-    const requestData: PermanentApiRequest = {
+    data: PermanentApiRequestData[] = [{}]
+  ): Promise<PermanentApiResponse<T>> {
+    const requestBody: PermanentApiRequest = {
       RequestVO: {
-        data,
         apiKey: this.apiKey,
         csrf: this.csrfStore.getCsrf(),
+        data,
       },
     };
-    const response = await this.axiosInstance.post(endpoint, requestData);
+    const response = await this.axiosInstance.post(endpoint, requestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: 'https://www.permanent.org',
+        Accept: 'application/json, text/plain, */*',
+        'Accept-Encoding': 'gzip, deflate, br',
+      },
+    });
 
     if (response.data.csrf) {
       this.csrfStore.setCsrf(response.data.csrf);

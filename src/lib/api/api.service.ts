@@ -1,8 +1,12 @@
 import axios from 'axios';
 
+import { ArchiveRepo } from './archive.repo';
 import { AuthRepo } from './auth.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
+import { FolderRepo } from './folder.repo';
+import { RecordRepo } from './record.repo';
+import { ShareRepo } from './share.repo';
 
 export const SESSION_COOKIE = 'permSession';
 export const MFA_COOKIE = 'permMFA';
@@ -18,12 +22,16 @@ export class ApiService {
   };
 
   public auth = new AuthRepo(this.repoConfig);
+  public archive = new ArchiveRepo(this.repoConfig);
+  public folder = new FolderRepo(this.repoConfig);
+  public record = new RecordRepo(this.repoConfig);
+  public share = new ShareRepo(this.repoConfig);
 
   constructor(
     sessionToken: string,
     mfaToken: string,
     private apiKey: string,
-    baseUrl = 'https://permanent.org/api'
+    baseUrl = 'https://www.permanent.org/api'
   ) {
     this.axiosInstance.defaults.headers = createDefaultHeaders(
       sessionToken,
