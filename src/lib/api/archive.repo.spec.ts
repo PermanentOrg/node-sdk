@@ -12,8 +12,6 @@ const test = anyTest as TestInterface<{
   csrfStore: CsrfStore;
 }>;
 
-const apiKey = 'apiKey';
-
 test.beforeEach('New ArchiveRepo', (t) => {
   const csrfStore = new CsrfStore();
   const axiosInstance = axios.create();
@@ -23,7 +21,7 @@ test.beforeEach('New ArchiveRepo', (t) => {
     archiveRepo: new ArchiveRepo({
       csrfStore,
       axiosInstance,
-      apiKey,
+      apiKey: 'fakeTestApiKey',
     }),
   };
 });
