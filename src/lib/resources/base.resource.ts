@@ -6,9 +6,9 @@ import { ArchiveStore } from './archive';
 
 /**
  * Base `Resource` to be extended by other feature/functional `Resources`
- * 
+ *
  * A `Resource` is the main organizational unit exposed to the end user, containing all methods pertaining to a specific feature, such as folders or sharing.
- * 
+ *
  * It optionally has access to shared session state stored in `ArchiveStore`, to automatically manage any boilerplate details required for a given task.
  *
  */

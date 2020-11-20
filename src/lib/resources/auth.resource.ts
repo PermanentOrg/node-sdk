@@ -6,7 +6,7 @@ import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
 /**
  * `Resource` that manages any exposed auth and session state methods for the client instance.
- * 
+ *
  * This includes things such as:
  * - validating the credentials and session
  * - setting which archive is currently in use by the client instance
