@@ -11,7 +11,7 @@ import { BaseResource } from './base.resource';
  * - validating the credentials and session
  * - setting which archive is currently in use by the client instance
  */
-export class AuthResource extends BaseResource {
+export class SessionResource extends BaseResource {
   constructor(public api: ApiService, public archiveStore: ArchiveStore) {
     super(api, archiveStore);
   }

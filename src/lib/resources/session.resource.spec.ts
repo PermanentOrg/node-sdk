@@ -6,10 +6,10 @@ import { PermanentApiResponse } from '../api/base.repo';
 import { PermSdkError } from '../error';
 
 import { ArchiveStore } from './archive';
-import { AuthResource } from './auth.resource';
+import { SessionResource } from './session.resource';
 
 const test = anyTest as TestInterface<{
-  auth: AuthResource;
+  session: SessionResource;
   api: ApiService;
   archiveStore: ArchiveStore;
 }>;
@@ -20,12 +20,12 @@ test.beforeEach((t) => {
   t.context = {
     api,
     archiveStore,
-    auth: new AuthResource(api, archiveStore),
+    session: new SessionResource(api, archiveStore),
   };
 });
 
 test('should create', (t) => {
-  t.assert(t.context.auth);
+  t.assert(t.context.session);
 });
 
 test('returns true for valid session', async (t) => {
@@ -49,7 +49,7 @@ test('returns true for valid session', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isSessionValid();
+  const isLoggedIn = await t.context.session.isSessionValid();
 
   t.assert(isLoggedIn);
 });
@@ -75,7 +75,7 @@ test('returns false for invalid session', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isSessionValid();
+  const isLoggedIn = await t.context.session.isSessionValid();
 
   t.assert(!isLoggedIn);
 });
@@ -94,7 +94,7 @@ test('returns false for response.isSuccessful = false', async (t) => {
   const responseFake = sinon.fake.resolves(loggedInResponse);
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isSessionValid();
+  const isLoggedIn = await t.context.session.isSessionValid();
 
   t.assert(!isLoggedIn);
 });
@@ -103,13 +103,13 @@ test('returns false for errored request', async (t) => {
   const responseFake = sinon.fake.throws(new Error('error'));
   sinon.replace(t.context.api.auth, 'isLoggedIn', responseFake);
 
-  const isLoggedIn = await t.context.auth.isSessionValid();
+  const isLoggedIn = await t.context.session.isSessionValid();
 
   t.assert(!isLoggedIn);
 });
 
 test('set archive in ArchiveStore after successful archive change request', async (t) => {
-  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
+  sinon.replace(t.context.session, 'isSessionValid', sinon.fake.resolves(true));
 
   const archiveNbr = '0003-0000';
 
@@ -133,21 +133,25 @@ test('set archive in ArchiveStore after successful archive change request', asyn
   const changeArchiveResponseFake = sinon.fake.resolves(changeArchiveResponse);
   sinon.replace(t.context.api.archive, 'change', changeArchiveResponseFake);
 
-  await t.context.auth.useArchive(archiveNbr);
+  await t.context.session.useArchive(archiveNbr);
 
   t.is(t.context.archiveStore.getArchive()?.archiveNbr, archiveNbr);
 });
 
 test('throw error on change if credentials invalid', async (t) => {
-  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(false));
+  sinon.replace(
+    t.context.session,
+    'isSessionValid',
+    sinon.fake.resolves(false)
+  );
 
   const archiveNbr = '0003-0000';
-  const error = await t.throwsAsync(t.context.auth.useArchive(archiveNbr));
+  const error = await t.throwsAsync(t.context.session.useArchive(archiveNbr));
   t.assert(error instanceof PermSdkError);
 });
 
 test('throw error on change if failed request', async (t) => {
-  sinon.replace(t.context.auth, 'isSessionValid', sinon.fake.resolves(true));
+  sinon.replace(t.context.session, 'isSessionValid', sinon.fake.resolves(true));
 
   const archiveNbr = '0003-0000';
   const changeArchiveResponse: PermanentApiResponse = {
@@ -170,6 +174,6 @@ test('throw error on change if failed request', async (t) => {
   const responseFake = sinon.fake.resolves(changeArchiveResponse);
   sinon.replace(t.context.api.archive, 'change', responseFake);
 
-  const error = await t.throwsAsync(t.context.auth.useArchive(archiveNbr));
+  const error = await t.throwsAsync(t.context.session.useArchive(archiveNbr));
   t.assert(error.message.includes(archiveNbr));
 });
