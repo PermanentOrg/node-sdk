@@ -4,7 +4,6 @@ import * as sinon from 'sinon';
 import { ApiService } from '../api/api.service';
 import { PermanentApiResponse } from '../api/base.repo';
 import { PermSdkError } from '../error';
-import { RecordVO } from '../model';
 
 import { ArchiveStore } from './archive';
 import { RecordResource } from './record.resource';

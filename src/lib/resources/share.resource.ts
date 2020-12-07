@@ -1,3 +1,4 @@
+import { AccessRole } from '../enum/access-role';
 import { PermSdkError } from '../error';
 import { FolderVO, RecordVO, ShareByUrlVO } from '../model';
 
@@ -7,7 +8,8 @@ export class ShareResource extends BaseResource {
   async updateShareLink(
     shareByUrlVo: ShareByUrlVO,
     showPreview: boolean,
-    autoApprove: boolean
+    autoApprove: boolean,
+    defaultAccessRole?: AccessRole
   ) {
     const showPreviewChanged = showPreview
       ? shareByUrlVo.previewToggle === 0
@@ -15,9 +17,13 @@ export class ShareResource extends BaseResource {
     const autoApproveChanged = autoApprove
       ? shareByUrlVo.autoApproveToggle === 0
       : shareByUrlVo.autoApproveToggle === 1;
-    if (showPreviewChanged || autoApproveChanged) {
+    const defaultAccessChanged =
+      defaultAccessRole && defaultAccessRole !== shareByUrlVo.defaultAccessRole;
+
+    if (showPreviewChanged || autoApproveChanged || defaultAccessChanged) {
       shareByUrlVo.autoApproveToggle = autoApprove ? 1 : 0;
       shareByUrlVo.previewToggle = showPreview ? 1 : 0;
+      shareByUrlVo.defaultAccessRole = defaultAccessRole;
 
       await this.api.share.updateShareLink(shareByUrlVo);
     }
@@ -38,7 +44,8 @@ export class ShareResource extends BaseResource {
   public async createRecordShareLink(
     record: Pick<RecordVO, 'folder_linkId'>,
     showPreview = true,
-    autoApprove = true
+    autoApprove = true,
+    defaultAccessRole = AccessRole.Viewer
   ) {
     const response = await this.api.share.generateRecordShareLink(record);
     if (!response.isSuccessful) {
@@ -50,7 +57,7 @@ export class ShareResource extends BaseResource {
 
     const vo = this.getVoFromResponse(response, 'Shareby_urlVO');
 
-    await this.updateShareLink(vo, showPreview, autoApprove);
+    await this.updateShareLink(vo, showPreview, autoApprove, defaultAccessRole);
 
     return vo.shareUrl;
   }
@@ -71,7 +78,8 @@ export class ShareResource extends BaseResource {
   public async createFolderShareLink(
     folder: Pick<FolderVO, 'folder_linkId'>,
     showPreview = true,
-    autoApprove = true
+    autoApprove = true,
+    defaultAccessRole = AccessRole.Viewer
   ) {
     const response = await this.api.share.generateFolderShareLink(folder);
     if (!response.isSuccessful) {
@@ -83,7 +91,7 @@ export class ShareResource extends BaseResource {
 
     const vo = this.getVoFromResponse(response, 'Shareby_urlVO');
 
-    await this.updateShareLink(vo, showPreview, autoApprove);
+    await this.updateShareLink(vo, showPreview, autoApprove, defaultAccessRole);
 
     return vo.shareUrl;
   }

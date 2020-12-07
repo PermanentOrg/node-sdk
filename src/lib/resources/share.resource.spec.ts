@@ -3,6 +3,7 @@ import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
 import { PermanentApiResponse } from '../api/base.repo';
+import { AccessRole } from '../enum/access-role';
 import { PermSdkError } from '../error';
 import { ShareByUrlVO } from '../model';
 
@@ -35,6 +36,7 @@ test('should return the new share URL on successful record share link response',
     folder_linkId,
     autoApproveToggle: 0,
     previewToggle: 0,
+    defaultAccessRole: AccessRole.Viewer,
   };
 
   const fakeResponse: PermanentApiResponse = {
@@ -83,6 +85,7 @@ test('should not update record share link preview and auto approve if set to fal
               folder_linkId,
               autoApproveToggle: 0,
               previewToggle: 0,
+              defaultAccessRole: AccessRole.Viewer,
             },
           },
         ],
@@ -193,6 +196,7 @@ test('should not update folder share link preview and auto approve if set to fal
               folder_linkId,
               autoApproveToggle: 0,
               previewToggle: 0,
+              defaultAccessRole: AccessRole.Viewer,
             },
           },
         ],
@@ -252,6 +256,7 @@ test('should set proper values on vo from update share booleans', async (t) => {
     folder_linkId: 1,
     autoApproveToggle: 0,
     previewToggle: 0,
+    defaultAccessRole: AccessRole.Viewer,
   };
 
   const firstVo = { ...defaultVo };
@@ -259,13 +264,19 @@ test('should set proper values on vo from update share booleans', async (t) => {
   const responseFake = sinon.fake.resolves(true);
   sinon.replace(t.context.api.share, 'updateShareLink', responseFake);
 
-  await t.context.share.updateShareLink(firstVo, true, true);
+  await t.context.share.updateShareLink(
+    firstVo,
+    true,
+    true,
+    AccessRole.Curator
+  );
 
   t.assert(
     responseFake.calledOnceWith({
       ...firstVo,
       autoApproveToggle: 1,
       previewToggle: 1,
+      defaultAccessRole: AccessRole.Curator,
     })
   );
 
@@ -273,12 +284,18 @@ test('should set proper values on vo from update share booleans', async (t) => {
 
   const secondVo = { ...defaultVo };
 
-  await t.context.share.updateShareLink(secondVo, false, true);
+  await t.context.share.updateShareLink(
+    secondVo,
+    false,
+    true,
+    AccessRole.Owner
+  );
   t.assert(
     responseFake.calledOnceWith({
       ...secondVo,
       autoApproveToggle: 1,
       previewToggle: 0,
+      defaultAccessRole: AccessRole.Owner,
     })
   );
 
