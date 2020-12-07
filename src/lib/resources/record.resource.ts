@@ -41,7 +41,8 @@ export class RecordResource extends BaseResource {
       fileData.displayName,
       fileData.uploadFileName,
       fileData.uploadUri,
-      parentFolder_linkId
+      parentFolder_linkId,
+      fileData.description
     );
 
     if (!response.isSuccessful) {

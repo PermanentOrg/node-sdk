@@ -4,6 +4,7 @@ import * as sinon from 'sinon';
 import { ApiService } from '../api/api.service';
 import { PermanentApiResponse } from '../api/base.repo';
 import { PermSdkError } from '../error';
+import { RecordVO } from '../model';
 
 import { ArchiveStore } from './archive';
 import { RecordResource } from './record.resource';
@@ -45,12 +46,14 @@ test('should return the new RecordVO on successful response', async (t) => {
   const uploadFileName = 'file.jpg';
   const uploadUri = 'https://file.com/file.jpg';
   const parentFolder_linkId = 3;
+  const description = 'description of the item';
 
   const newRecord = {
     recordId: 98,
     parentFolderId: 4,
     parentFolder_linkId,
     displayName,
+    description,
     uploadFileName,
     folder_linkId: 5,
     archiveId: 10,
@@ -80,6 +83,7 @@ test('should return the new RecordVO on successful response', async (t) => {
       displayName,
       uploadFileName,
       uploadUri,
+      description,
     },
     { folder_linkId: parentFolder_linkId }
   );

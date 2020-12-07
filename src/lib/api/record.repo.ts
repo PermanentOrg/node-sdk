@@ -13,7 +13,8 @@ export class RecordRepo extends BaseRepo {
     displayName: string,
     uploadFileName: string,
     uploadUri: string,
-    parentFolder_linkId: number
+    parentFolder_linkId: number,
+    description?: string
   ) {
     const record: RecordVOFromUrl = {
       displayName,
@@ -22,6 +23,10 @@ export class RecordRepo extends BaseRepo {
       status: 'status.record.only_meta',
       uploadFileName,
     };
+
+    if (description) {
+      record.description = description;
+    }
 
     const requestData: PermanentApiRequestData = {
       RecordVO: record,
