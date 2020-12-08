@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { ArchiveRepo } from './archive.repo';
 import { AuthRepo } from './auth.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
@@ -17,6 +18,7 @@ export class ApiService {
     apiKey: this.apiKey,
   };
 
+  public archive = new ArchiveRepo(this.repoConfig);
   public auth = new AuthRepo(this.repoConfig);
 
   constructor(
