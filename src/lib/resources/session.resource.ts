@@ -1,5 +1,6 @@
 import { ApiService } from '../api/api.service';
 import { ArchiveResponse } from '../api/archive.repo';
+import { FolderResponse } from '../api/folder.repo';
 import { PermSdkError } from '../error';
 
 import { ArchiveStore } from './archive';
@@ -77,5 +78,21 @@ export class SessionResource extends BaseResource {
     );
 
     this.archiveStore.setArchive(archive);
+
+    const getRootResponse = await this.api.folder.getRoot();
+
+    if (!getRootResponse.isSuccessful) {
+      throw new PermSdkError(
+        `Could not get root folder for archive ${archiveNbr}`,
+        this.getMessageFromResponse(getRootResponse)
+      );
+    }
+
+    const rootFolder = this.getVoFromResponse<FolderResponse>(
+      getRootResponse,
+      'FolderVO'
+    );
+
+    this.archiveStore.setRoot(rootFolder);
   }
 }

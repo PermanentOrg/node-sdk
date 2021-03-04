@@ -5,6 +5,7 @@ export interface RecordVO extends BaseVO {
   archiveId: number;
   archiveNbr: string;
   displayName: string;
+  description?: string;
 
   folder_linkId: number;
 
@@ -16,7 +17,7 @@ export interface RecordVO extends BaseVO {
 export type Record = RecordVO;
 
 export interface RecordVOFromUrl
-  extends Pick<RecordVO, 'displayName' | 'uploadFileName'> {
+  extends Pick<RecordVO, 'displayName' | 'uploadFileName' | 'description'> {
   parentFolder_linkId: number;
   uploadUri: string;
   status: 'status.record.only_meta';

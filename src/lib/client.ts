@@ -1,6 +1,8 @@
 import { ApiService } from './api/api.service';
 import { PermSdkError } from './error';
 import { ArchiveStore } from './resources/archive';
+import { FolderResource } from './resources/folder.resource';
+import { RecordResource } from './resources/record.resource';
 import { SessionResource } from './resources/session.resource';
 
 export interface PermanentConstructorConfigI {
@@ -19,6 +21,8 @@ export class Permanent {
 
   public api: ApiService;
 
+  public folder: FolderResource;
+  public record: RecordResource;
   public session: SessionResource;
 
   public archiveStore = new ArchiveStore();
@@ -46,7 +50,13 @@ export class Permanent {
     this.archiveNbr = archiveNbr;
     this.apiKey = apiKey;
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
+    this.folder = new FolderResource(this.api, this.archiveStore);
+    this.record = new RecordResource(this.api, this.archiveStore);
     this.session = new SessionResource(this.api, this.archiveStore);
+  }
+
+  public async init() {
+    await this.session.useArchive(this.archiveNbr);
   }
 
   public getSessionToken() {
