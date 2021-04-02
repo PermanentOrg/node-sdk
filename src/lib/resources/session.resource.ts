@@ -44,6 +44,19 @@ export class SessionResource extends BaseResource {
     }
   }
 
+  public async getSessionRoot(): Promise<string | undefined> {
+    try {
+      const response = await this.api.folder.getRoot();
+      if (response.isSuccessful) {
+        return response.Results[0].data[0].FolderVO.archiveNbr;
+      } else {
+        return '';
+      }
+    } catch (err) {
+      return err;
+    }
+  }
+
   /**
    * Set the current client instance to use a given archive when making any subsequent requests.
    *
