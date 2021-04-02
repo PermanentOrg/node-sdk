@@ -88,3 +88,47 @@ const newFolder = await permanent.folder.create(
   existingFolder // optional, specify to create somewhere besides My Files folder
 );
 ```
+
+### Generating share links
+
+To create a public share link that can be used to request sharing access to an item, use either `share.createRecordShareLink` or `share.createFolderShareLink` to share either a single `record` or a single `folder`, respectively.
+
+The share link defaults to allowing preview of items without having access, and auto-approving access for anyone who requests it, but these options can be specified using optional parameters.
+
+```js
+// Upload and share a single record with default settings
+
+const record = await permanent.record.uploadFromUrl({
+  /* record data */
+});
+const recordShareUrl = await permanent.share.createRecordShareLink(record);
+
+// Create and share a folder with preview and auto-approve disabled
+
+const folder = await permanent.folder.create('Shared Photos');
+await permanent.record.uploadFromUrl(
+  {
+    /* record data */
+  },
+  folder
+);
+const folderShareUrl = await permanent.share.createFolderShareLink(
+  folder,
+  false,
+  false
+);
+```
+
+There's also an optional parameter available when creating share links that allows setting the default access level given to archives granted access to the share. An `AccessRole` enum has been exported with all access role values.
+
+```js
+import { Permanent, AccessRole } from '@permanentorg/node-sdk';
+
+const folderShareUrl = await permanent.share.createFolderShareLink(
+  folder,
+  false,
+  false,
+  AccessRole.Curator
+);
+```
+
