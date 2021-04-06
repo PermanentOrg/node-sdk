@@ -16,6 +16,16 @@ export class ArchiveRepo extends BaseRepo {
     ]);
   }
 
+  public getDefaultArchive(archiveId: number) {
+    const requestData: PermanentApiRequestData = {
+      ArchiveVO: {
+        archiveId,
+      }
+    };
+
+    return this.request<ArchiveResponse>('archive/getbyarchiveid', [requestData]);
+  }
+
   public change(archiveNbr: string) {
     const requestData: PermanentApiRequestData = {
       ArchiveVO: {

@@ -21,7 +21,7 @@ export class Permanent {
   private archiveNbr: string;
 
   public api: ApiService;
-
+  
   public folder: FolderResource;
   public record: RecordResource;
   public session: SessionResource;
@@ -37,10 +37,6 @@ export class Permanent {
 
     if (!mfaToken) {
       throw new PermSdkError('Missing mfaToken in config');
-    }
-
-    if (!archiveNbr) {
-      throw new PermSdkError('Missing archiveNbr in config');
     }
 
     if (!apiKey) {
@@ -59,6 +55,11 @@ export class Permanent {
   }
 
   public async init() {
+    if (this.archiveNbr === undefined) {
+      const archive = await this.session.getAccountArchive();
+      // get the default archiveNbr from the account
+      this.archiveNbr = archive.archiveNbr;
+    }
     await this.session.useArchive(this.archiveNbr);
   }
 
