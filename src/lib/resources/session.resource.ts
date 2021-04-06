@@ -2,6 +2,7 @@ import { ApiService } from '../api/api.service';
 import { ArchiveResponse } from '../api/archive.repo';
 import { FolderResponse } from '../api/folder.repo';
 import { PermSdkError } from '../error';
+import { ArchiveVO } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -41,6 +42,19 @@ export class SessionResource extends BaseResource {
       }
     } catch (err) {
       return false;
+    }
+  }
+
+  public async getAccountArchive(): Promise<ArchiveVO> {
+    try {
+      const response = await this.api.account.getSessionAccount();
+      const account = response.Results[0].data[0].AccountVO;
+      const archiveResponse = await this.api.archive.getDefaultArchive(
+        account.defaultArchiveId
+      );
+      return archiveResponse.Results[0].data[0].ArchiveVO;
+    } catch (err) {
+      return err;
     }
   }
 
