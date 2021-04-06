@@ -28,7 +28,11 @@ async function run() {
     await permanent.init();
     console.log('session started');
 
-    const archiveNum = await permanent.session.getSessionRoot();
+    const folderVO = await permanent.session.getSessionRoot();
     console.log('Archive number is');
-    console.log(archiveNum);
+    console.log(folderVO.archiveNbr);
+
+    const appFolders = await permanent.folder.getAppFolders();
+    console.log('DEBUG: app folders are');
+    console.log(appFolders);
 }

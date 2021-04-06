@@ -22,6 +22,17 @@ export class BaseResource {
     return response.Results[0].data[0][voName];
   }
 
+  getVosFromResponse<T = PermanentApiResponseDataBase>(
+    response: PermanentApiResponse<T>,
+    voName: keyof T
+  ) {
+    let voArray: T[keyof T][] = [];
+    response.Results[0].data.forEach(element => {
+      voArray.push(element[voName]);
+    });
+    return voArray;
+  };
+
   getMessageFromResponse(response: PermanentApiResponse) {
     return response.Results[0].message;
   }

@@ -45,4 +45,10 @@ export class FolderResource extends BaseResource {
 
     return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
   }
+
+  public async getAppFolders(): Promise<FolderVO[]> {
+    const appRoot = await this.api.folder.getAppRoot();
+    const response = await this.api.folder.getWithChildren(appRoot.Results[0].data[0].FolderVO);
+    return this.getVosFromResponse<FolderResponse>(response, 'FolderVO');
+  }
 }

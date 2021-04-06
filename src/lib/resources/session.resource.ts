@@ -2,7 +2,7 @@ import { ApiService } from '../api/api.service';
 import { ArchiveResponse } from '../api/archive.repo';
 import { FolderResponse } from '../api/folder.repo';
 import { PermSdkError } from '../error';
-import { ArchiveVO } from '../model';
+import { ArchiveVO, FolderVO } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -45,14 +45,10 @@ export class SessionResource extends BaseResource {
     }
   }
 
-  public async getSessionRoot(): Promise<string | undefined> {
+  public async getSessionRoot(): Promise<FolderVO> {
     try {
       const response = await this.api.folder.getRoot();
-      if (response.isSuccessful) {
-        return response.Results[0].data[0].FolderVO.archiveNbr;
-      } else {
-        return '';
-      }
+      return response.Results[0].data[0].FolderVO;
     } catch (err) {
       return err;
     }
