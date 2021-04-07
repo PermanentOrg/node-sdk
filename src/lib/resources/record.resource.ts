@@ -1,4 +1,5 @@
 import { ApiService } from '../api/api.service';
+import { BillingResponse } from '../api/billing.repo';
 import { RecordResponse } from '../api/record.repo';
 import { PermSdkError } from '../error';
 import { ParentFolderVO, RecordVOFromUrl } from '../model';
@@ -53,5 +54,19 @@ export class RecordResource extends BaseResource {
     }
 
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
+  }
+
+  public async addStorage(recordId: number) {
+    const accountResponse = await this.api.account.getSessionAccount();
+    let account = accountResponse.Results[0].data[0].AccountVO;
+    const recordResponse = await this.api.record.getById(recordId);
+    const record = recordResponse.Results[0].data[0].RecordVO;
+    // the record initially does not have a size, so adding this in for testing
+    record.size = 98894;
+    const billingResponse = await this.api.billing.addStorage(
+      account.accountId,
+      record.size,
+    );
+    return this.getVoFromResponse<BillingResponse>(billingResponse, 'LedgerNonfinancialVO');
   }
 }

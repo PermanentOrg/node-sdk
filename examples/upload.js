@@ -44,11 +44,8 @@ async function run() {
   }
 
   try {
-    for (let i = 0; i < attempts; i++) {
-      await Promise.all([
-        permanent.record.uploadFromUrl({displayName: 'image', uploadUri: imageUrl, uploadFileName: imageName}, folderForSet),
-      ]);
-    }
+    const record = await permanent.record.uploadFromUrl({displayName: 'image', uploadUri: imageUrl, uploadFileName: imageName}, folderForSet);
+    permanent.record.addStorage(record.recordId);
     logTime();
     console.log('all success!');
   } catch (err) {

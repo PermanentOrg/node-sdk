@@ -3,6 +3,7 @@ import axios from 'axios';
 import {AccountRepo} from './account.repo';
 import { ArchiveRepo } from './archive.repo';
 import { AuthRepo } from './auth.repo';
+import {BillingRepo} from './billing.repo';
 import { RepoConstructorConfig } from './base.repo';
 import { CsrfStore } from './csrf';
 import { FolderRepo } from './folder.repo';
@@ -25,6 +26,7 @@ export class ApiService {
   public account = new AccountRepo(this.repoConfig);
   public archive = new ArchiveRepo(this.repoConfig);
   public auth = new AuthRepo(this.repoConfig);
+  public billing = new BillingRepo(this.repoConfig);
   public folder = new FolderRepo(this.repoConfig);
   public record = new RecordRepo(this.repoConfig);
   public share = new ShareRepo(this.repoConfig);

@@ -34,4 +34,13 @@ export class RecordRepo extends BaseRepo {
 
     return this.request<RecordResponse>('/record/post', [requestData]);
   }
+
+  public getById(recordId: number) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: {
+        recordId: recordId,
+      }
+    }
+    return this.request<RecordResponse>('/record/getbyid', [requestData]);
+  }
 }
