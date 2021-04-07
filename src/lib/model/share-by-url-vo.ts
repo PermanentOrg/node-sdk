@@ -1,3 +1,5 @@
+import { AccessRole } from '../enum/access-role';
+
 import { BaseVO } from './base-vo';
 
 export interface ShareByUrlVO extends BaseVO {
@@ -7,6 +9,7 @@ export interface ShareByUrlVO extends BaseVO {
 
   autoApproveToggle: 0 | 1;
   previewToggle: 0 | 1;
+  defaultAccessRole?: AccessRole;
 }
 
 export type ShareLink = ShareByUrlVO;

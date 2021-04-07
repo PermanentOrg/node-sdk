@@ -4,6 +4,7 @@ import { ArchiveStore } from './resources/archive';
 import { FolderResource } from './resources/folder.resource';
 import { RecordResource } from './resources/record.resource';
 import { SessionResource } from './resources/session.resource';
+import { ShareResource } from './resources/share.resource';
 
 export interface PermanentConstructorConfigI {
   sessionToken: string;
@@ -24,6 +25,7 @@ export class Permanent {
   public folder: FolderResource;
   public record: RecordResource;
   public session: SessionResource;
+  public share: ShareResource;
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
@@ -53,6 +55,7 @@ export class Permanent {
     this.folder = new FolderResource(this.api, this.archiveStore);
     this.record = new RecordResource(this.api, this.archiveStore);
     this.session = new SessionResource(this.api, this.archiveStore);
+    this.share = new ShareResource(this.api);
   }
 
   public async init() {
