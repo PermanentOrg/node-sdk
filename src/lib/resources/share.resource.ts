@@ -5,6 +5,8 @@ import { FolderVO, RecordVO, ShareByUrlVO } from '../model';
 import { BaseResource } from './base.resource';
 
 export class ShareResource extends BaseResource {
+  // note that even though "autoApproveToggle" looks like a boolean,
+  // it is treated as an integer in the backend code.  Hence the zeroes and ones.
   async updateShareLink(
     shareByUrlVo: ShareByUrlVO,
     showPreview: boolean,
