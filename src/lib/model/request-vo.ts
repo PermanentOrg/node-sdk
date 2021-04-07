@@ -1,15 +1,19 @@
 import { AccountVO } from './account-vo';
 import { ArchiveVO } from './archive-vo';
+import { BillingTransferVO } from './billingtransfer-vo';
 import { FolderVO } from './folder-vo';
+import { LedgerNonfinancialVO } from './ledgernonfinancial-vo';
 import { RecordVO } from './record-vo';
 import { ShareByUrlVO } from './share-by-url-vo';
 import { SimpleVO } from './simple-vo';
 
 export interface PermanentApiResponseDataBase {
-  FolderVO?: FolderVO;
-  RecordVO?: RecordVO;
   ArchiveVO?: ArchiveVO;
   AccountVO?: AccountVO;
+  BillingTransferVO?: BillingTransferVO;
+  FolderVO?: FolderVO;
+  LedgerNonfinancialVO?: LedgerNonfinancialVO;
+  RecordVO?: RecordVO;
   SimpleVO?: SimpleVO;
   Shareby_urlVO?: ShareByUrlVO;
 }
@@ -19,10 +23,12 @@ export type PermanentApiResponseData<
 > = Required<Pick<PermanentApiResponseDataBase, T>>;
 
 export interface PermanentApiRequestData {
-  FolderVO?: Partial<FolderVO>;
-  RecordVO?: Partial<RecordVO>;
   ArchiveVO?: Partial<ArchiveVO>;
   AccountVO?: Partial<AccountVO>;
+  BillingTransferVO?: Partial<BillingTransferVO>;
+  FolderVO?: Partial<FolderVO>;
+  LedgerNonfinancialVO?: Partial<LedgerNonfinancialVO>;
+  RecordVO?: Partial<RecordVO>;
   SimpleVO?: Partial<SimpleVO>;
   Shareby_urlVO?: Partial<ShareByUrlVO>;
 }

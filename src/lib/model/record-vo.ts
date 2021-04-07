@@ -8,7 +8,7 @@ export interface RecordVO extends BaseVO {
   description?: string;
 
   folder_linkId: number;
-
+  size?: number;
   uploadFileName: string;
   parentFolderId: number;
   parentFolder_linkId: number;
