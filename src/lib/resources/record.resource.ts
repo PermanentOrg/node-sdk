@@ -1,8 +1,9 @@
 import { ApiService } from '../api/api.service';
+import { SimpleVOResponse } from '../api/auth.repo';
 import { BillingResponse } from '../api/billing.repo';
 import { RecordResponse } from '../api/record.repo';
 import { PermSdkError } from '../error';
-import { ParentFolderVO, RecordVOFromUrl } from '../model';
+import { ParentFolderVO, RecordVO, RecordVOFromUrl } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -56,13 +57,9 @@ export class RecordResource extends BaseResource {
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
 
-  public async addStorage(recordId: number) {
+  public async addStorage(record: RecordVO) {
     const accountResponse = await this.api.account.getSessionAccount();
     const account = accountResponse.Results[0].data[0].AccountVO;
-    const recordResponse = await this.api.record.getById(recordId);
-    const record = recordResponse.Results[0].data[0].RecordVO;
-    // the record initially does not have a size, so adding this in for testing
-    record.size = 98894;
     const billingResponse = await this.api.billing.addStorage(
       account.accountId,
       record.size
@@ -71,5 +68,16 @@ export class RecordResource extends BaseResource {
       billingResponse,
       'LedgerNonfinancialVO'
     );
+  }
+
+  public async getPresignedUrl(fileType: string, record: RecordVO) {
+    const response = await this.api.record.getPresignedUrl(fileType, record);
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'could not get presigned url',
+        response.Results[0].message
+      );
+    }
+    return this.getVoFromResponse<SimpleVOResponse>(response, 'SimpleVO');
   }
 }

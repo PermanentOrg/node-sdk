@@ -1,9 +1,11 @@
 import {
   PermanentApiRequestData,
   PermanentApiResponseData,
+  RecordVO,
   RecordVOFromUrl,
 } from '../model';
 
+import { SimpleVOResponse } from './auth.repo';
 import { BaseRepo } from './base.repo';
 
 export type RecordResponse = PermanentApiResponseData<'RecordVO'>;
@@ -42,5 +44,21 @@ export class RecordRepo extends BaseRepo {
       },
     };
     return this.request<RecordResponse>('/record/getbyid', [requestData]);
+  }
+
+  public getPresignedUrl(uploadedType: string, record: RecordVO) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: {
+        parentFolder_linkId: record.parentFolder_linkId,
+        size: record.size,
+      },
+      SimpleVO: {
+        key: 'filetype',
+        value: uploadedType,
+      },
+    };
+    return this.request<SimpleVOResponse>('/record/getpresignedurl', [
+      requestData,
+    ]);
   }
 }

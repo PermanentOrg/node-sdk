@@ -45,7 +45,9 @@ async function run() {
 
   try {
     const record = await permanent.record.uploadFromUrl({displayName: 'image', uploadUri: imageUrl, uploadFileName: imageName}, folderForSet);
-    permanent.record.addStorage(record.recordId);
+    record.size = 98894;
+    const testPresigned = await permanent.record.getPresignedUrl('image/jpeg', record);
+    permanent.record.addStorage(record);
     logTime();
     console.log('all success!');
   } catch (err) {
