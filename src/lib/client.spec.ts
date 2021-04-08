@@ -11,6 +11,7 @@ const test = anyTest as TestInterface<{
 test.beforeEach((t) => {
   const options: PermanentConstructorConfigI = {
     apiKey: 'apiapiapi',
+    archiveId: 1,
     sessionToken: 'sessionsessionsession',
     mfaToken: 'mfamfamfa',
     archiveNbr: '0001-0000',

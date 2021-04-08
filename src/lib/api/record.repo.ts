@@ -61,4 +61,15 @@ export class RecordRepo extends BaseRepo {
       requestData,
     ]);
   }
+
+  public registerRecord(record: RecordVO, s3url: string) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: record,
+      SimpleVO: {
+        key: 's3url',
+        value: s3url,
+      },
+    };
+    return this.request<RecordResponse>('/record/registerRecord', requestData);
+  }
 }

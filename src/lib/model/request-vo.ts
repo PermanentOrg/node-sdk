@@ -36,5 +36,5 @@ export interface PermanentApiRequestData {
 export interface RequestVO {
   apiKey: string;
   csrf?: string;
-  data: PermanentApiRequestData[];
+  data: PermanentApiRequestData[] | PermanentApiRequestData;
 }

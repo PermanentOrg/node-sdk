@@ -27,7 +27,6 @@ const imageName = 'puppy.jpg';
 run();
 
 async function run() {
-  const attempts = 1;
 
   await permanent.init();
   console.log('session valid!');
@@ -44,15 +43,33 @@ async function run() {
   }
 
   try {
-    const record = await permanent.record.uploadFromUrl({displayName: 'image', uploadUri: imageUrl, uploadFileName: imageName}, folderForSet);
-    record.size = 98894;
-    const testPresigned = await permanent.record.getPresignedUrl('image/jpeg', record);
-    permanent.record.addStorage(record);
-    logTime();
-    console.log('all success!');
+      let record = {};
+      // note: this is the size of our example photo
+      record.size = 98894;
+      const fileType = 'image/jpeg';
+      // call getappfolders here, get parentfolder_linkid
+      const appFolders = await permanent.folder.getAppFolders();
+      const etherpadFolder = await permanent.folder.create(`Etherpad`, appFolders[0]);
+      // we expect to get size and type from the client
+      // assemble into a recordvo
+      record.parentFolder_linkId = etherpadFolder.parentFolder_linkId;
+      const testPresigned = await permanent.record.getPresignedUrl(fileType, record);
+      // return presigned info to the client so it can post directly to the destination
+      // then call registerRecordAndAddStorage
+      const archiveId = permanent.getArchiveId();
+      record.parentFolderId = etherpadFolder.parentFolderId;
+      record.parentFolder_linkId = etherpadFolder.parentFolder_linkId;
+      record.displayName = 'puppy';
+      record.uploadFileName = imageName;
+      record.derivedCreatedDT = '2021-04-08';
+      record.archiveId = archiveId;
+      permanent.record.registerRecord(record, testPresigned.value.destinationUrl);
+      permanent.record.addStorage(record);
+      logTime();
+      console.log('all success!');
   } catch (err) {
-    console.dir(err);
-    logTime();
-    console.error('failure :(');
+      console.dir(err);
+      logTime();
+      console.error('failure :(');
   }
 }

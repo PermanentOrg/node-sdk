@@ -80,4 +80,9 @@ export class RecordResource extends BaseResource {
     }
     return this.getVoFromResponse<SimpleVOResponse>(response, 'SimpleVO');
   }
+
+  public async registerRecord(record: RecordVO, s3url: string) {
+    const response = await this.api.record.registerRecord(record, s3url);
+    return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
+  }
 }

@@ -9,6 +9,7 @@ import { ShareResource } from './resources/share.resource';
 export interface PermanentConstructorConfigI {
   sessionToken: string;
   mfaToken: string;
+  archiveId: number;
   archiveNbr?: string;
   apiKey: string;
   baseUrl?: string;
@@ -18,6 +19,7 @@ export class Permanent {
   private apiKey: string;
   private sessionToken: string;
   private mfaToken: string;
+  private archiveId: number;
   private archiveNbr?: string;
 
   public api: ApiService;
@@ -29,7 +31,14 @@ export class Permanent {
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
-    const { sessionToken, mfaToken, archiveNbr, apiKey, baseUrl } = config;
+    const {
+      sessionToken,
+      mfaToken,
+      archiveId,
+      archiveNbr,
+      apiKey,
+      baseUrl,
+    } = config;
 
     if (!sessionToken) {
       throw new PermSdkError('Missing sessionToken in config');
@@ -45,6 +54,7 @@ export class Permanent {
 
     this.sessionToken = sessionToken;
     this.mfaToken = mfaToken;
+    this.archiveId = archiveId;
     this.archiveNbr = archiveNbr;
     this.apiKey = apiKey;
     this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
@@ -59,6 +69,9 @@ export class Permanent {
       const archive = await this.session.getAccountArchive();
       // get the default archiveNbr from the account
       this.archiveNbr = archive.archiveNbr;
+      if (archive.archiveId !== undefined) {
+        this.archiveId = archive.archiveId;
+      }
     }
     await this.session.useArchive(this.archiveNbr);
   }
@@ -73,5 +86,9 @@ export class Permanent {
 
   public getArchiveNbr() {
     return this.archiveNbr;
+  }
+
+  public getArchiveId() {
+    return this.archiveId;
   }
 }
