@@ -63,15 +63,3 @@ test('throws error for missing mfaToken', async (t) => {
   t.assert(error instanceof PermSdkError);
   t.assert(error.message.includes('mfaToken'));
 });
-
-test('throws error for missing archiveNbr', async (t) => {
-  const error = t.throws(() => {
-    new Permanent(({
-      ...t.context.options,
-      ...{ archiveNbr: undefined },
-    } as unknown) as PermanentConstructorConfigI);
-  });
-
-  t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes('archiveNbr'));
-});

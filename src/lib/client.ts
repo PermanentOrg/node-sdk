@@ -9,7 +9,7 @@ import { ShareResource } from './resources/share.resource';
 export interface PermanentConstructorConfigI {
   sessionToken: string;
   mfaToken: string;
-  archiveNbr: string;
+  archiveNbr?: string;
   apiKey: string;
   baseUrl?: string;
 }
@@ -18,7 +18,7 @@ export class Permanent {
   private apiKey: string;
   private sessionToken: string;
   private mfaToken: string;
-  private archiveNbr: string;
+  private archiveNbr?: string;
 
   public api: ApiService;
 
@@ -39,10 +39,6 @@ export class Permanent {
       throw new PermSdkError('Missing mfaToken in config');
     }
 
-    if (!archiveNbr) {
-      throw new PermSdkError('Missing archiveNbr in config');
-    }
-
     if (!apiKey) {
       throw new PermSdkError('Missing apiKey in config');
     }
@@ -59,6 +55,11 @@ export class Permanent {
   }
 
   public async init() {
+    if (this.archiveNbr === undefined) {
+      const archive = await this.session.getAccountArchive();
+      // get the default archiveNbr from the account
+      this.archiveNbr = archive.archiveNbr;
+    }
     await this.session.useArchive(this.archiveNbr);
   }
 
