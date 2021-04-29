@@ -56,8 +56,16 @@ export class RecordResource extends BaseResource {
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
 
-  public async getPresignedUrl(fileType: string, record: RecordVO) {
-    const response = await this.api.record.getPresignedUrl(fileType, record);
+  public async getPresignedUrl(
+    fileType: string,
+    record: RecordVO,
+    padToken?: string
+  ) {
+    const response = await this.api.record.getPresignedUrl(
+      fileType,
+      record,
+      padToken
+    );
     if (!response.isSuccessful) {
       throw new PermSdkError(
         'could not get presigned url',
@@ -67,8 +75,16 @@ export class RecordResource extends BaseResource {
     return this.getVoFromResponse<SimpleVOResponse>(response, 'SimpleVO');
   }
 
-  public async registerRecordAndAddStorage(record: RecordVO, s3url: string) {
-    const response = await this.api.record.registerRecord(record, s3url);
+  public async registerRecordAndAddStorage(
+    record: RecordVO,
+    s3url: string,
+    padToken?: string
+  ) {
+    const response = await this.api.record.registerRecord(
+      record,
+      s3url,
+      padToken
+    );
     if (!response.isSuccessful) {
       throw new PermSdkError(
         'record could not be registered',

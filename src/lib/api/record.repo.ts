@@ -46,29 +46,46 @@ export class RecordRepo extends BaseRepo {
     return this.request<RecordResponse>('/record/getbyid', [requestData]);
   }
 
-  public getPresignedUrl(uploadedType: string, record: RecordVO) {
+  public getPresignedUrl(
+    uploadedType: string,
+    record: RecordVO,
+    padToken?: string
+  ) {
     const requestData: PermanentApiRequestData = {
       RecordVO: {
         parentFolder_linkId: record.parentFolder_linkId,
         size: record.size,
       },
-      SimpleVO: {
-        key: 'filetype',
-        value: uploadedType,
-      },
+      SimpleVOs: [
+        {
+          key: 'filetype',
+          value: uploadedType,
+        },
+        {
+          key: 'padToken',
+          value: padToken,
+        },
+      ],
     };
     return this.request<SimpleVOResponse>('/record/getpresignedurl', [
       requestData,
     ]);
   }
 
-  public registerRecord(record: RecordVO, s3url: string) {
+  public registerRecord(record: RecordVO, s3url: string, padToken?: string) {
     const requestData: PermanentApiRequestData = {
       RecordVO: record,
-      SimpleVO: {
-        key: 's3url',
-        value: s3url,
-      },
+      SimpleVOs: [
+        {
+          key: 's3url',
+          value: s3url,
+        },
+
+        {
+          key: 'padToken',
+          value: padToken,
+        },
+      ],
     };
     return this.request<RecordResponse>('/record/registerRecord', requestData);
   }

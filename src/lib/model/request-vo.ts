@@ -24,6 +24,7 @@ export interface PermanentApiRequestData {
   FolderVO?: Partial<FolderVO>;
   RecordVO?: Partial<RecordVO>;
   SimpleVO?: Partial<SimpleVO>;
+  SimpleVOs?: Partial<SimpleVO>[];
   Shareby_urlVO?: Partial<ShareByUrlVO>;
 }
 
