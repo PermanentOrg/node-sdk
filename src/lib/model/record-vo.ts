@@ -1,9 +1,9 @@
 import { BaseVO } from './base-vo';
 
 export interface RecordVO extends BaseVO {
-  recordId: number;
-  archiveId: number;
-  archiveNbr: string;
+  recordId?: number;
+  archiveId?: number;
+  archiveNbr?: string;
   displayName: string;
   description?: string;
 

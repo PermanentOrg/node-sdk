@@ -9,7 +9,7 @@ import { ShareResource } from './resources/share.resource';
 export interface PermanentConstructorConfigI {
   sessionToken: string;
   mfaToken: string;
-  archiveId: number;
+  archiveId?: number;
   archiveNbr?: string;
   apiKey: string;
   baseUrl?: string;
@@ -19,7 +19,7 @@ export class Permanent {
   private apiKey: string;
   private sessionToken: string;
   private mfaToken: string;
-  private archiveId: number;
+  private archiveId?: number;
   private archiveNbr?: string;
 
   public api: ApiService;
@@ -69,9 +69,7 @@ export class Permanent {
       const archive = await this.session.getAccountArchive();
       // get the default archiveNbr from the account
       this.archiveNbr = archive.archiveNbr;
-      if (archive.archiveId !== undefined) {
-        this.archiveId = archive.archiveId;
-      }
+      this.archiveId = archive.archiveId;
     }
     await this.session.useArchive(this.archiveNbr);
   }

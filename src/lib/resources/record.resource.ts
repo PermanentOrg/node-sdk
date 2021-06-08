@@ -72,7 +72,22 @@ export class RecordResource extends BaseResource {
         response.Results[0].message
       );
     }
-    return this.getVoFromResponse<SimpleVOResponse>(response, 'SimpleVO');
+
+    const presignedUrlResponse = this.getVoFromResponse<SimpleVOResponse>(
+      response,
+      'SimpleVO'
+    );
+    if (
+      typeof presignedUrlResponse.value === 'object' &&
+      'presignedPost' in presignedUrlResponse.value
+    ) {
+      return presignedUrlResponse.value;
+    } else {
+      throw new PermSdkError(
+        'unexpected response type',
+        response.Results[0].message
+      );
+    }
   }
 
   public async registerRecordAndAddStorage(
