@@ -40,7 +40,7 @@ export class BaseRepo {
     T extends PermanentApiResponseDataBase = PermanentApiResponseDataBase
   >(
     endpoint: string,
-    data: PermanentApiRequestData[] = [{}]
+    data: PermanentApiRequestData[] | PermanentApiRequestData = [{}]
   ): Promise<PermanentApiResponse<T>> {
     const requestBody: PermanentApiRequest = {
       RequestVO: {

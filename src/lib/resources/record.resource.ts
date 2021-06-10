@@ -1,7 +1,8 @@
 import { ApiService } from '../api/api.service';
+import { SimpleVOResponse } from '../api/auth.repo';
 import { RecordResponse } from '../api/record.repo';
 import { PermSdkError } from '../error';
-import { ParentFolderVO, RecordVOFromUrl } from '../model';
+import { ParentFolderVO, RecordVO, RecordVOFromUrl } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -52,6 +53,59 @@ export class RecordResource extends BaseResource {
       );
     }
 
+    return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
+  }
+
+  public async getPresignedUrl(
+    fileType: string,
+    record: RecordVO,
+    padToken?: string
+  ) {
+    const response = await this.api.record.getPresignedUrl(
+      fileType,
+      record,
+      padToken
+    );
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'could not get presigned url',
+        response.Results[0].message
+      );
+    }
+
+    const presignedUrlResponse = this.getVoFromResponse<SimpleVOResponse>(
+      response,
+      'SimpleVO'
+    );
+    if (
+      typeof presignedUrlResponse.value === 'object' &&
+      'presignedPost' in presignedUrlResponse.value
+    ) {
+      return presignedUrlResponse.value;
+    } else {
+      throw new PermSdkError(
+        'unexpected response type',
+        response.Results[0].message
+      );
+    }
+  }
+
+  public async registerRecordAndAddStorage(
+    record: RecordVO,
+    s3url: string,
+    padToken?: string
+  ) {
+    const response = await this.api.record.registerRecord(
+      record,
+      s3url,
+      padToken
+    );
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'record could not be registered',
+        response.Results[0].message
+      );
+    }
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
 }

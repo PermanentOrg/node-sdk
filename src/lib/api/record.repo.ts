@@ -1,9 +1,11 @@
 import {
   PermanentApiRequestData,
   PermanentApiResponseData,
+  RecordVO,
   RecordVOFromUrl,
 } from '../model';
 
+import { SimpleVOResponse } from './auth.repo';
 import { BaseRepo } from './base.repo';
 
 export type RecordResponse = PermanentApiResponseData<'RecordVO'>;
@@ -33,5 +35,58 @@ export class RecordRepo extends BaseRepo {
     };
 
     return this.request<RecordResponse>('/record/post', [requestData]);
+  }
+
+  public getById(recordId: number) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: {
+        recordId: recordId,
+      },
+    };
+    return this.request<RecordResponse>('/record/getbyid', [requestData]);
+  }
+
+  public getPresignedUrl(
+    uploadedType: string,
+    record: RecordVO,
+    padToken?: string
+  ) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: {
+        parentFolder_linkId: record.parentFolder_linkId,
+        size: record.size,
+      },
+      SimpleVOs: [
+        {
+          key: 'filetype',
+          value: uploadedType,
+        },
+        {
+          key: 'padToken',
+          value: padToken,
+        },
+      ],
+    };
+    return this.request<SimpleVOResponse>('/record/getpresignedurl', [
+      requestData,
+    ]);
+  }
+
+  public registerRecord(record: RecordVO, s3url: string, padToken?: string) {
+    const requestData: PermanentApiRequestData = {
+      RecordVO: record,
+      SimpleVOs: [
+        {
+          key: 's3url',
+          value: s3url,
+        },
+
+        {
+          key: 'padToken',
+          value: padToken,
+        },
+      ],
+    };
+    return this.request<RecordResponse>('/record/registerRecord', requestData);
   }
 }

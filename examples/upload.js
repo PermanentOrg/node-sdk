@@ -21,39 +21,78 @@ const permanent = new permSdk.Permanent({
     'apiKey': 'PERMANENT_API_KEY',
 });
 
-const imageUrl = 'https://live.staticflickr.com/4360/23503731148_915435b305_b.jpg';
-const imageName = 'puppy.jpg';
+const token = 'YOUR_TOKEN_HERE';
 
 run();
 
 async function run() {
-  const attempts = 1;
 
   await permanent.init();
   console.log('session valid!');
 
-  const start = new Date();
-  const folderForSet = await permanent.folder.create(`simultaneous test @ ${new Date().toISOString()}`);
-
-  console.log('folder created');
-
-  const logTime = () => {
-    const end = new Date();
-    const seconds = (end.getTime() - start.getTime()) / 1000;
-    console.log(`Time elapsed: ${seconds} seconds`);
-  }
-
   try {
-    for (let i = 0; i < attempts; i++) {
-      await Promise.all([
-        permanent.record.uploadFromUrl({displayName: 'image', uploadUri: imageUrl, uploadFileName: imageName}, folderForSet),
-      ]);
-    }
-    logTime();
-    console.log('all success!');
+      let record = {};
+      /*
+      I have been getting the record from web-app for testing
+      purposes.  Using the exact data given below will fail, because
+      the record won't exist in AWS.  To get your own version of
+      this, alter your local version of web-app so that it never
+      completes the upload process and shows some information in
+      the console.
+          --- a/src/app/core/services/upload/uploader.ts
+          +++ b/src/app/core/services/upload/uploader.ts
+          @@ -55,6 +55,7 @@ export class Uploader {
+              emitUploadProgress: (e: HttpEvent<any>) => void,
+          ) => {
+              const { destinationUrl, presignedPost } = await this.getUploadData(item);
+                  +    console.log(destinationUrl);
+
+              await this.httpClient.post(
+                  presignedPost.url,
+                  @@ -67,7 +68,9 @@ export class Uploader {
+                  },
+              ).forEach(emitUploadProgress);
+
+                  -    return this.registerRecord(item, destinationUrl);
+                  +    console.log("DEBUG: This is the item to use for the RecordVO");
+                  +    console.log(item);
+                  +    //return this.registerRecord(item, destinationUrl);
+          };
+
+      Then upload a document with dev tools open and grab the record
+      and destination url from the console.
+      */
+
+
+      record = {
+          "cleanParams": [
+              "recordId",
+              "archiveNbr",
+              "folder_linkId",
+              "parentFolder_linkId",
+              "parentFolderId",
+              "uploadFileName"
+          ],
+          "parentFolderId": 3,
+          "parentFolder_linkId": 3,
+          "displayName": "20190328_M15_Gaia_stars.gif",
+          "uploadFileName": "20190328_M15_Gaia_stars.gif",
+          "size": 4102311,
+          "derivedCreatedDT": "2020-04-10T19:46:46.000Z",
+          "isRecord": true,
+          "isFolder": false,
+          "isFetching": false,
+          "isPendingAction": false,
+          "isNewlyCreated": false,
+          "dataStatus": 0
+      };
+      // Also have been pulling this out of web-app for testing.
+      const dest_url = 'https://[BUCKET].s3.amazonaws.com/[FOLDER]/unprocessed/[KEY]';
+      //
+      permanent.record.registerRecordAndAddStorage(record, dest_url, token);
+      console.log('all success!');
   } catch (err) {
-    console.dir(err);
-    logTime();
-    console.error('failure :(');
+      console.dir(err);
+      console.error('failure :(');
   }
 }

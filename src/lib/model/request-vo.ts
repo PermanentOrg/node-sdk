@@ -6,10 +6,10 @@ import { ShareByUrlVO } from './share-by-url-vo';
 import { SimpleVO } from './simple-vo';
 
 export interface PermanentApiResponseDataBase {
-  FolderVO?: FolderVO;
-  RecordVO?: RecordVO;
   ArchiveVO?: ArchiveVO;
   AccountVO?: AccountVO;
+  FolderVO?: FolderVO;
+  RecordVO?: RecordVO;
   SimpleVO?: SimpleVO;
   Shareby_urlVO?: ShareByUrlVO;
 }
@@ -19,16 +19,17 @@ export type PermanentApiResponseData<
 > = Required<Pick<PermanentApiResponseDataBase, T>>;
 
 export interface PermanentApiRequestData {
-  FolderVO?: Partial<FolderVO>;
-  RecordVO?: Partial<RecordVO>;
   ArchiveVO?: Partial<ArchiveVO>;
   AccountVO?: Partial<AccountVO>;
+  FolderVO?: Partial<FolderVO>;
+  RecordVO?: Partial<RecordVO>;
   SimpleVO?: Partial<SimpleVO>;
+  SimpleVOs?: Partial<SimpleVO>[];
   Shareby_urlVO?: Partial<ShareByUrlVO>;
 }
 
 export interface RequestVO {
   apiKey: string;
   csrf?: string;
-  data: PermanentApiRequestData[];
+  data: PermanentApiRequestData[] | PermanentApiRequestData;
 }
