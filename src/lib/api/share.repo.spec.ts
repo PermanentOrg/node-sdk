@@ -17,8 +17,6 @@ const test = anyTest as TestInterface<{
   csrfStore: CsrfStore;
 }>;
 
-const apiKey = 'apiKey';
-
 test.beforeEach('New ShareRepo', (t) => {
   const csrfStore = new CsrfStore();
   const axiosInstance = axios.create();
@@ -28,7 +26,6 @@ test.beforeEach('New ShareRepo', (t) => {
     shareRepo: new ShareRepo({
       csrfStore,
       axiosInstance,
-      apiKey,
     }),
   };
 });

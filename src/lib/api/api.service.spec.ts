@@ -10,11 +10,10 @@ const test = anyTest as TestInterface<{
 
 const sessionToken = 'sessionToken';
 const mfaToken = 'mfaToken';
-const apiKey = 'apiKey';
 const baseUrl = 'http://baseurl.com';
 
 test.beforeEach('New ApiService', (t) => {
-  const apiService = new ApiService(sessionToken, mfaToken, apiKey, baseUrl);
+  const apiService = new ApiService(sessionToken, mfaToken, baseUrl);
   const mockAxios = new MockAdapter(apiService.getAxiosInstance());
 
   t.context = {

@@ -19,7 +19,6 @@ export class ApiService {
   private repoConfig: RepoConstructorConfig = {
     csrfStore: this.csrfStore,
     axiosInstance: this.axiosInstance,
-    apiKey: this.apiKey,
   };
 
   public account = new AccountRepo(this.repoConfig);
@@ -32,7 +31,6 @@ export class ApiService {
   constructor(
     sessionToken: string,
     mfaToken: string,
-    private apiKey: string,
     baseUrl = 'https://www.permanent.org/api'
   ) {
     this.axiosInstance.defaults.headers = createDefaultHeaders(

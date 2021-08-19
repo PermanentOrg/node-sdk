@@ -21,7 +21,6 @@ test.beforeEach('New ArchiveRepo', (t) => {
     archiveRepo: new ArchiveRepo({
       csrfStore,
       axiosInstance,
-      apiKey: 'fakeTestApiKey',
     }),
   };
 });

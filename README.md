@@ -8,7 +8,8 @@ Built on [bitjson/typescript-starter](https://github.com/bitjson/typescript-star
 
 ## Usage
 
-The client needs to be configured with access keys, available on request from engineers@permanent.org.
+The client needs to be configured with authentication tokens.
+Please contact engineers@permanent.org for access.
 
 ```js
 // ES import
@@ -22,7 +23,6 @@ const permanent = new Permanent({
   sessionToken,
   mfaToken,
   archiveNbr,
-  apiKey,
   baseUrl, // optional, defaults to prod environment URL
 });
 

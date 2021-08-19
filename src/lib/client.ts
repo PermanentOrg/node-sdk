@@ -11,12 +11,10 @@ export interface PermanentConstructorConfigI {
   mfaToken: string;
   archiveId?: number;
   archiveNbr?: string;
-  apiKey: string;
   baseUrl?: string;
 }
 
 export class Permanent {
-  private apiKey: string;
   private sessionToken: string;
   private mfaToken: string;
   private archiveId?: number;
@@ -31,14 +29,7 @@ export class Permanent {
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
-    const {
-      sessionToken,
-      mfaToken,
-      archiveId,
-      archiveNbr,
-      apiKey,
-      baseUrl,
-    } = config;
+    const { sessionToken, mfaToken, archiveId, archiveNbr, baseUrl } = config;
 
     if (!sessionToken) {
       throw new PermSdkError('Missing sessionToken in config');
@@ -48,16 +39,11 @@ export class Permanent {
       throw new PermSdkError('Missing mfaToken in config');
     }
 
-    if (!apiKey) {
-      throw new PermSdkError('Missing apiKey in config');
-    }
-
     this.sessionToken = sessionToken;
     this.mfaToken = mfaToken;
     this.archiveId = archiveId;
     this.archiveNbr = archiveNbr;
-    this.apiKey = apiKey;
-    this.api = new ApiService(sessionToken, mfaToken, this.apiKey, baseUrl);
+    this.api = new ApiService(sessionToken, mfaToken, baseUrl);
     this.folder = new FolderResource(this.api, this.archiveStore);
     this.record = new RecordResource(this.api, this.archiveStore);
     this.session = new SessionResource(this.api, this.archiveStore);
