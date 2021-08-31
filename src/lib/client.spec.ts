@@ -10,7 +10,6 @@ const test = anyTest as TestInterface<{
 
 test.beforeEach((t) => {
   const options: PermanentConstructorConfigI = {
-    apiKey: 'apiapiapi',
     archiveId: 1,
     sessionToken: 'sessionsessionsession',
     mfaToken: 'mfamfamfa',
@@ -27,18 +26,6 @@ test('instance gets config options', (t) => {
   t.is(t.context.permanent.getSessionToken(), t.context.options.sessionToken);
   t.is(t.context.permanent.getMfaToken(), t.context.options.mfaToken);
   t.is(t.context.permanent.getArchiveNbr(), t.context.options.archiveNbr);
-});
-
-test('throws error for missing apiKey', async (t) => {
-  const error = t.throws(() => {
-    new Permanent(({
-      ...t.context.options,
-      ...{ apiKey: undefined },
-    } as unknown) as PermanentConstructorConfigI);
-  });
-
-  t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes('apiKey'));
 });
 
 test('throws error for missing sessionToken', async (t) => {

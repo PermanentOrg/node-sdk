@@ -18,7 +18,6 @@ const permanent = new permSdk.Permanent({
     'sessionToken': 'permSession_COOKIE',
     'mfaToken': 'permMFA_COOKIE',
     'archiveNbr': 'YOUR_ARCHIVE',
-    'apiKey': 'PERMANENT_API_KEY',
 });
 
 run();

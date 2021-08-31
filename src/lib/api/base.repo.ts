@@ -22,18 +22,15 @@ export interface PermanentApiResponse<T = PermanentApiResponseDataBase> {
 export interface RepoConstructorConfig {
   csrfStore: CsrfStore;
   axiosInstance: AxiosInstance;
-  apiKey: string;
 }
 
 export class BaseRepo {
   private csrfStore: CsrfStore;
   private axiosInstance: AxiosInstance;
-  private apiKey: string;
 
   constructor(config: RepoConstructorConfig) {
     this.csrfStore = config.csrfStore;
     this.axiosInstance = config.axiosInstance;
-    this.apiKey = config.apiKey;
   }
 
   async request<
@@ -44,7 +41,6 @@ export class BaseRepo {
   ): Promise<PermanentApiResponse<T>> {
     const requestBody: PermanentApiRequest = {
       RequestVO: {
-        apiKey: this.apiKey,
         csrf: this.csrfStore.getCsrf(),
         data,
       },

@@ -13,7 +13,6 @@ const test = anyTest as TestInterface<{
   mockAxios: MockAdapter;
 }>;
 const baseUrl = 'http://test.com';
-const apiKey = 'apiKey';
 
 test.beforeEach('New BaseRepo', (t) => {
   const csrfStore = new CsrfStore();
@@ -29,21 +28,8 @@ test.beforeEach('New BaseRepo', (t) => {
     baseRepo: new BaseRepo({
       csrfStore,
       axiosInstance,
-      apiKey,
     }),
   };
-});
-
-test('requests are made using API key', async (t) => {
-  const endpoint = '/endpoint';
-
-  t.context.mockAxios.onPost(`${baseUrl}${endpoint}`).replyOnce((config) => {
-    const requestData = JSON.parse(config.data) as PermanentApiRequest;
-    t.is(requestData.RequestVO.apiKey, apiKey);
-    return [200, {}];
-  });
-
-  await t.context.baseRepo.request(endpoint);
 });
 
 test('requests are made using csrf from CsrfStore', async (t) => {
