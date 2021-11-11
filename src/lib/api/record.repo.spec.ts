@@ -2,7 +2,12 @@ import anyTest, { TestInterface } from 'ava';
 import axios from 'axios';
 import * as sinon from 'sinon';
 
-import { PermanentApiRequestData, RecordVOFromUrl } from '../model';
+import {
+  FolderVO,
+  PermanentApiRequestData,
+  RecordVO,
+  RecordVOFromUrl,
+} from '../model';
 
 import { CsrfStore } from './csrf';
 import { RecordRepo } from './record.repo';
@@ -58,4 +63,35 @@ test('should call post endpoint with proper RecordVO structure', async (t) => {
   );
 
   t.assert(requestFake.calledOnceWith('/record/post', expectedRequestData));
+});
+
+test('should call copy endpoint', async (t) => {
+  const requestFake = sinon.fake.resolves(true);
+  sinon.replace(t.context.recordRepo, 'request', requestFake);
+
+  const record: RecordVO = {
+    displayName: 'File',
+    folder_linkId: 1,
+    uploadFileName: 'File.png',
+    parentFolderId: 1,
+    parentFolder_linkId: 1,
+  };
+
+  const destination: FolderVO = {
+    folderId: 2,
+    folder_linkId: 2,
+  };
+
+  const expectedRequestData = [
+    {
+      RecordVO: record,
+      FolderDestVO: {
+        folder_linkId: 2,
+      },
+    },
+  ];
+
+  await t.context.recordRepo.copy([record], destination);
+
+  t.assert(requestFake.calledOnceWith('/record/copy', expectedRequestData));
 });
