@@ -53,4 +53,43 @@ export class FolderResource extends BaseResource {
     );
     return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
   }
+
+  public async getPublicFolder(): Promise<FolderVO> {
+    const publicResponse = await this.api.folder.getPublicRoot();
+    const publicRoot = this.getVoFromResponse<FolderResponse>(
+      publicResponse,
+      'FolderVO'
+    );
+    const response = await this.api.folder.getWithChildren(publicRoot);
+    return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
+  }
+
+  public async getMyFilesFolder(): Promise<FolderVO> {
+    const response = await this.api.folder.getWithChildren(
+      this.archiveStore.getPrivateRoot()
+    );
+
+    return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
+  }
+
+  /**
+   * Copies an array of folders to the destination folder
+   *
+   * @returns a Promise that resolves to the newly copied folder
+   */
+  public async copy(
+    folderVOs: FolderVO[],
+    destination: FolderVO
+  ): Promise<FolderVO> {
+    const response = await this.api.folder.copy(folderVOs, destination);
+
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'folder could not be copied',
+        response.Results[0].message
+      );
+    }
+
+    return this.getVoFromResponse<FolderResponse>(response, 'FolderVO');
+  }
 }
