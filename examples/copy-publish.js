@@ -30,27 +30,13 @@ async function run() {
     await permanent.init();
     console.log('session started');
 
-    // I want to copy a random item from "My Files" to "Public"
-    // In other words, we're publishing a random file from "My Files"!
     const root = await permanent.folder.getMyFilesFolder();
     const public = await permanent.folder.getPublicFolder();
     const randomChild = randomElement(root.ChildItemVOs);
 
-    console.log(`Copying "${randomChild.displayName}" to Public...`);
-
-    /*
-    You must call the proper API endpoint to copy a folder vs a record.
-    Right now when you're handed an arbitrary list of ItemVOs like we are doing
-    here, you have to manually check whether an Item is a folder or record.
-
-    Hopefully, in the future, this will be smoothed out a bit more.
-    */
-    let result;
-    if (randomChild.type.includes('folder')) {
-      // The API takes an array of items to copy in case you want to copy multiple
-      result = await permanent.folder.copy([randomChild], public);
-    } else {
-      result = await permanent.record.copy([randomChild], public);
+    if (randomChild) {
+      console.log(`Copying "${randomChild.displayName}" to Public...`);
+      const result = await permanent.item.copy(randomChild, public);
     }
 
     console.log('Done!');
