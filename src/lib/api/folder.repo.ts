@@ -42,14 +42,14 @@ export class FolderRepo extends BaseRepo {
   }
 
   public copy(folderVOs: FolderVO[], destination: FolderVO) {
-    const requestData: PermanentApiRequestData[] = folderVOs.map((folderVO) => {
-      return {
+    const requestData: PermanentApiRequestData[] = folderVOs.map(
+      (folderVO) => ({
         FolderVO: folderVO,
         FolderDestVO: {
           folder_linkId: destination.folder_linkId,
         },
-      };
-    });
+      })
+    );
 
     return this.request<FolderResponse>('/folder/copy', requestData);
   }
