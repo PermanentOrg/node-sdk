@@ -38,7 +38,7 @@
     "prepare": "npm run build"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
     "axios": "^0.21.2"
