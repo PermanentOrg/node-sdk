@@ -1,4 +1,4 @@
-// To run this script, use `node share.js`
+// To run this script, use `node copy-publish.js`
 //
 // Uncomment this line to run on an insecure local environment, if you
 // like:
@@ -30,13 +30,13 @@ async function run() {
     await permanent.init();
     console.log('session started');
 
-    const root = await permanent.folder.getMyFilesFolder();
-    const public = await permanent.folder.getPublicFolder();
-    const randomChild = randomElement(root.ChildItemVOs);
+    const privateRoot = await permanent.folder.getMyFilesFolder();
+    const publicRoot = await permanent.folder.getPublicFolder();
+    const randomChild = randomElement(privateRoot.ChildItemVOs);
 
     if (randomChild) {
       console.log(`Copying "${randomChild.displayName}" to Public...`);
-      const result = await permanent.item.copy(randomChild, public);
+      const result = await permanent.item.copy(randomChild, publicRoot);
     }
 
     console.log('Done!');
