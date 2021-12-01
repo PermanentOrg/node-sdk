@@ -41,7 +41,8 @@
     "node": ">=12"
   },
   "dependencies": {
-    "axios": "^0.21.2"
+    "axios": "^0.21.2",
+    "joi": "^17.4.3"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",

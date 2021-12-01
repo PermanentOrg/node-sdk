@@ -1,7 +1,6 @@
 import anyTest, { TestInterface } from 'ava';
 
 import { Permanent, PermanentConstructorConfigI } from './client';
-import { PermSdkError } from './error';
 
 const test = anyTest as TestInterface<{
   permanent: Permanent;
@@ -36,7 +35,6 @@ test('throws error for missing sessionToken', async (t) => {
     } as unknown) as PermanentConstructorConfigI);
   });
 
-  t.assert(error instanceof PermSdkError);
   t.assert(error.message.includes('sessionToken'));
 });
 
@@ -48,6 +46,5 @@ test('throws error for missing mfaToken', async (t) => {
     } as unknown) as PermanentConstructorConfigI);
   });
 
-  t.assert(error instanceof PermSdkError);
   t.assert(error.message.includes('mfaToken'));
 });
