@@ -45,7 +45,7 @@ export class Permanent {
     this.mfaToken = mfaToken;
     this.archiveId = archiveId;
     this.archiveNbr = archiveNbr;
-    this.api = new ApiService(sessionToken, mfaToken, baseUrl);
+    this.api = ApiService.fromSession(sessionToken, mfaToken, baseUrl);
     this.folder = new FolderResource(this.api, this.archiveStore);
     this.record = new RecordResource(this.api, this.archiveStore);
     this.item = new ItemResource(this.folder, this.record);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 
 import { AccountRepo } from './account.repo';
 import { ArchiveRepo } from './archive.repo';
@@ -28,25 +29,24 @@ export class ApiService {
   public record = new RecordRepo(this.repoConfig);
   public share = new ShareRepo(this.repoConfig);
 
-  constructor(
+  private constructor(defaultConfig: AxiosRequestConfig) {
+    Object.assign(this.axiosInstance.defaults, defaultConfig);
+  }
+
+  public static fromSession(
     sessionToken: string,
     mfaToken: string,
-    baseUrl = 'https://www.permanent.org/api'
+    baseURL = 'https://www.permanent.org/api'
   ) {
-    this.axiosInstance.defaults.headers = createDefaultHeaders(
-      sessionToken,
-      mfaToken
-    );
-    this.axiosInstance.defaults.baseURL = baseUrl;
+    return new ApiService({
+      baseURL,
+      headers: {
+        Cookie: `${SESSION_COOKIE}=${sessionToken}; ${MFA_COOKIE}=${mfaToken};`,
+      },
+    });
   }
 
   getAxiosInstance() {
     return this.axiosInstance;
   }
-}
-
-function createDefaultHeaders(sessionToken: string, mfaToken: string) {
-  return {
-    Cookie: `${SESSION_COOKIE}=${sessionToken}; ${MFA_COOKIE}=${mfaToken};`,
-  };
 }
