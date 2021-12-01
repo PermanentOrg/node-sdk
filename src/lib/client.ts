@@ -1,5 +1,6 @@
+import Joi from 'joi';
+
 import { ApiService } from './api/api.service';
-import { PermSdkError } from './error';
 import { ArchiveStore } from './resources/archive';
 import { FolderResource } from './resources/folder.resource';
 import { ItemResource } from './resources/item.resource';
@@ -14,6 +15,14 @@ export interface PermanentConstructorConfigI {
   archiveNbr?: string;
   baseUrl?: string;
 }
+
+const schema = Joi.object({
+  sessionToken: Joi.string().required(),
+  mfaToken: Joi.string().required(),
+  archiveId: Joi.number().optional(),
+  archiveNbr: Joi.string().optional(),
+  baseUrl: Joi.string().optional(),
+});
 
 export class Permanent {
   private sessionToken: string;
@@ -31,15 +40,14 @@ export class Permanent {
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
+    Joi.assert(
+      config,
+      schema,
+      '@permanentorg/node-sdk: Invalid configuration',
+      { abortEarly: false }
+    );
+
     const { sessionToken, mfaToken, archiveId, archiveNbr, baseUrl } = config;
-
-    if (!sessionToken) {
-      throw new PermSdkError('Missing sessionToken in config');
-    }
-
-    if (!mfaToken) {
-      throw new PermSdkError('Missing mfaToken in config');
-    }
 
     this.sessionToken = sessionToken;
     this.mfaToken = mfaToken;
