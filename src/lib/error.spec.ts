@@ -4,11 +4,6 @@ import { PermSdkError } from './error';
 
 const packageName = '@permanentorg/node-sdk';
 
-test('should have a generic message with the package name when not given', (t) => {
-  const error = new PermSdkError();
-  t.assert(error.message.includes(packageName));
-});
-
 test('should have the given message prefixed with the package name', (t) => {
   const message = 'my message';
   const error = new PermSdkError(message);
