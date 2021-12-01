@@ -1,4 +1,5 @@
 import {
+  FolderVO,
   PermanentApiRequestData,
   PermanentApiResponseData,
   RecordVO,
@@ -88,5 +89,16 @@ export class RecordRepo extends BaseRepo {
       ],
     };
     return this.request<RecordResponse>('/record/registerRecord', requestData);
+  }
+
+  public copy(records: RecordVO[], destination: FolderVO) {
+    const requestData: PermanentApiRequestData[] = records.map((recordVO) => ({
+      RecordVO: recordVO,
+      FolderDestVO: {
+        folder_linkId: destination.folder_linkId,
+      },
+    }));
+
+    return this.request<RecordResponse>('/record/copy', requestData);
   }
 }

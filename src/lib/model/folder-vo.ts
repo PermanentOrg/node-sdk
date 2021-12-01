@@ -31,5 +31,6 @@ export interface FolderVO extends BaseVO {
 }
 
 export type ParentFolderVO = Pick<FolderVO, 'folder_linkId'>;
+export type DestinationFolderVO = Pick<FolderVO, 'folder_linkId'>;
 
 export type Folder = FolderVO;

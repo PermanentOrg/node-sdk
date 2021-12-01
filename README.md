@@ -132,3 +132,16 @@ const folderShareUrl = await permanent.share.createFolderShareLink(
 );
 ```
 
+### Copying items
+You can copy items to a specific folder using the `item.copy` method which works on both folders and records. There are also separate type-specific methods, `folder.copy` and `record.copy`.
+
+```js
+const privateRoot = await permanent.folder.getMyFilesFolder();
+const publicRoot = await permanent.folder.getPublicFolder();
+const firstChild = privateRoot.ChildItemVOs.shift();
+
+// Copies the first item in "My Files" to the Public Workspace
+await permanent.item.copy(firstChild, publicRoot);
+```
+
+Copying to the Public Root (accessible by using `folder.getPublicFolder`) is functionally equivalent to publishing a file in the Permanent web app.

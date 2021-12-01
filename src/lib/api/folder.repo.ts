@@ -17,6 +17,10 @@ export class FolderRepo extends BaseRepo {
     return this.request<FolderResponse>('/folder/getAppRoot');
   }
 
+  public getPublicRoot() {
+    return this.request<FolderResponse>('/folder/getPublicRoot');
+  }
+
   public getWithChildren(rootFolderVO: FolderVO) {
     const requestData: PermanentApiRequestData = {
       FolderVO: rootFolderVO,
@@ -35,5 +39,18 @@ export class FolderRepo extends BaseRepo {
     };
 
     return this.request<FolderResponse>('/folder/post', [requestData]);
+  }
+
+  public copy(folderVOs: FolderVO[], destination: FolderVO) {
+    const requestData: PermanentApiRequestData[] = folderVOs.map(
+      (folderVO) => ({
+        FolderVO: folderVO,
+        FolderDestVO: {
+          folder_linkId: destination.folder_linkId,
+        },
+      })
+    );
+
+    return this.request<FolderResponse>('/folder/copy', requestData);
   }
 }

@@ -2,7 +2,7 @@ import { ApiService } from '../api/api.service';
 import { SimpleVOResponse } from '../api/auth.repo';
 import { RecordResponse } from '../api/record.repo';
 import { PermSdkError } from '../error';
-import { ParentFolderVO, RecordVO, RecordVOFromUrl } from '../model';
+import { FolderVO, ParentFolderVO, RecordVO, RecordVOFromUrl } from '../model';
 
 import { ArchiveStore } from './archive';
 import { BaseResource } from './base.resource';
@@ -106,6 +106,27 @@ export class RecordResource extends BaseResource {
         response.Results[0].message
       );
     }
+    return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
+  }
+
+  /**
+   * Copies an array of records to the destination folder
+   *
+   * @returns a Promise that resolves to the newly copied record
+   */
+  public async copy(
+    records: RecordVO[],
+    destination: FolderVO
+  ): Promise<RecordVO> {
+    const response = await this.api.record.copy(records, destination);
+
+    if (!response.isSuccessful) {
+      throw new PermSdkError(
+        'record could not be copied',
+        response.Results[0].message
+      );
+    }
+
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
 }
