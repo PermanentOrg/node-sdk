@@ -15,7 +15,7 @@ const test = anyTest as TestInterface<{
 }>;
 
 test.beforeEach((t) => {
-  const api = new ApiService('session', 'mfa', 'test');
+  const api = ApiService.fromSession('session', 'mfa', 'test');
   t.context = {
     api,
     share: new ShareResource(api),

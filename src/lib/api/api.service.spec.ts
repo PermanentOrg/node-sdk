@@ -13,7 +13,7 @@ const mfaToken = 'mfaToken';
 const baseUrl = 'http://baseurl.com';
 
 test.beforeEach('New ApiService', (t) => {
-  const apiService = new ApiService(sessionToken, mfaToken, baseUrl);
+  const apiService = ApiService.fromSession(sessionToken, mfaToken, baseUrl);
   const mockAxios = new MockAdapter(apiService.getAxiosInstance());
 
   t.context = {
