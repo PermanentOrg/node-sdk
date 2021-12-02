@@ -46,6 +46,11 @@ export class SessionResource extends BaseResource {
   }
 
   public async getAccountArchive(): Promise<ArchiveVO> {
+    const isLoggedIn = await this.isSessionValid();
+    if (!isLoggedIn) {
+      throw new PermSdkError('Credentials invalid');
+    }
+
     try {
       const response = await this.api.account.getSessionAccount();
       const account = response.Results[0].data[0].AccountVO;
