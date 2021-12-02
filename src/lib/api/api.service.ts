@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
+import type { AccessToken } from 'simple-oauth2';
 
 import { AccountRepo } from './account.repo';
 import { ArchiveRepo } from './archive.repo';
@@ -42,6 +43,18 @@ export class ApiService {
       baseURL,
       headers: {
         Cookie: `${SESSION_COOKIE}=${sessionToken}; ${MFA_COOKIE}=${mfaToken};`,
+      },
+    });
+  }
+
+  public static fromToken(
+    accessToken: AccessToken,
+    baseURL = 'https://www.permanent.org/api'
+  ) {
+    return new ApiService({
+      baseURL,
+      headers: {
+        Authorization: `Bearer ${accessToken.token.access_token}`,
       },
     });
   }
