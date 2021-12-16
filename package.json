@@ -39,7 +39,7 @@
     "prepare": "npm run build && husky install"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
     "axios": "^0.21.2"
