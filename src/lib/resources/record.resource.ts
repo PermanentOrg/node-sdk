@@ -129,4 +129,14 @@ export class RecordResource extends BaseResource {
 
     return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
   }
+
+  public async getRecordById(recordId: number): Promise<RecordVO> {
+    const response = await this.api.record.getById(recordId);
+
+    if (!response.isSuccessful) {
+      throw new PermSdkError('no record found', response.Results[0].message);
+    }
+
+    return this.getVoFromResponse<RecordResponse>(response, 'RecordVO');
+  }
 }
