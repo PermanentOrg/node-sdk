@@ -64,10 +64,7 @@ class PermanentOAuthClient {
   public loadToken(token: string) {
     const tokenObject = JSON.parse(token);
     const accessToken = this.client.createToken(tokenObject);
-    return new Permanent({
-      accessToken: accessToken,
-      baseUrl: this.baseUrl,
-    });
+    return accessToken;
   }
 }
 
