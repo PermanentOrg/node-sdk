@@ -30,16 +30,19 @@ async function run() {
     console.log('session started');
 
     const privateRoot = await permanent.folder.getMyFilesFolder();
-    const randomChild = randomElement(privateRoot.ChildItemVOs);
-
-    // doing this specifically for a record
-    if (randomChild && randomChild.uploadFileName) {
-      console.log("Get the full randomChild record");
-      const result = await permanent.record.getRecordById(randomChild.recordId);
-      const cdnLink = result['FileVOs'][0]['fileURL'];
-      console.log(cdnLink);
+    const childRecords = privateRoot.ChildItemVOs.filter(
+        (item) => permanent.item.isItemARecord(item)
+    );
+    if (childRecords.length === 0) {
+        console.log('No records in My Files.  Upload or move a record to My Files to get a CDN link.');
     } else {
-      console.log("No children or not a record");
+        const randomRecord = randomElement(childRecords);
+        console.log('Get the full randomChild record with files');
+        const result = await permanent.record.getRecordById(
+            randomRecord.recordId
+        );
+        const cdnLink = result['FileVOs'][0]['fileURL'];
+        console.log(cdnLink);
     }
 
     console.log('Done!');

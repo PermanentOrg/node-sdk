@@ -17,7 +17,7 @@ export class ItemResource {
     }
   }
 
-  protected isItemARecord(item: ItemVO): boolean {
+  public isItemARecord(item: ItemVO): boolean {
     const record = item as RecordVO;
     return typeof record.uploadFileName !== 'undefined';
     // HACK: uploadFileName is the only required property
