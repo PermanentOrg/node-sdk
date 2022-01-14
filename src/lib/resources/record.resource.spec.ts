@@ -180,3 +180,38 @@ test('should throw error on unsuccessful response', async (t) => {
   t.assert(error instanceof PermSdkError);
   t.assert(error.message.includes(errorMessage));
 });
+
+test('should return specified record', async (t) => {
+  const recordTestId = 101;
+  const privateRootLinkId = t.context.archiveStore.getPrivateRoot()
+    .folder_linkId;
+  const existingRecord = {
+    recordId: recordTestId,
+    displayName: 'some display name',
+    folder_linkId: 5,
+    uploadFileName: 'some_filename.txt',
+    parentFolderId: privateRootLinkId,
+    parentFolder_linkId: 4,
+  };
+
+  const fakeResponse: PermanentApiResponse = {
+    csrf: 'csrf',
+    isSuccessful: true,
+    isSystemUp: true,
+    Results: [
+      {
+        data: [
+          {
+            RecordVO: existingRecord,
+          },
+        ],
+      },
+    ],
+  };
+  const responseFake = sinon.fake.resolves(fakeResponse);
+  sinon.replace(t.context.api.record, 'getById', responseFake);
+
+  const returnedRecord = await t.context.record.getRecordById(recordTestId);
+
+  t.deepEqual(returnedRecord, existingRecord);
+});
