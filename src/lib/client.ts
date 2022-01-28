@@ -1,5 +1,7 @@
+import Joi from 'joi';
+import type { AccessToken } from 'simple-oauth2';
+
 import { ApiService } from './api/api.service';
-import { PermSdkError } from './error';
 import { ArchiveStore } from './resources/archive';
 import { FolderResource } from './resources/folder.resource';
 import { ItemResource } from './resources/item.resource';
@@ -8,16 +10,29 @@ import { SessionResource } from './resources/session.resource';
 import { ShareResource } from './resources/share.resource';
 
 export interface PermanentConstructorConfigI {
-  sessionToken: string;
-  mfaToken: string;
+  sessionToken?: string;
+  mfaToken?: string;
+  accessToken?: AccessToken;
   archiveId?: number;
   archiveNbr?: string;
   baseUrl?: string;
 }
 
+const schema = Joi.object({
+  sessionToken: Joi.string().optional(),
+  mfaToken: Joi.string().optional(),
+  accessToken: Joi.object().optional(),
+  archiveId: Joi.number().optional(),
+  archiveNbr: Joi.string().optional(),
+  baseUrl: Joi.string().optional(),
+})
+  .and('sessionToken', 'mfaToken')
+  .xor('sessionToken', 'accessToken');
+
 export class Permanent {
-  private sessionToken: string;
-  private mfaToken: string;
+  private sessionToken?: string;
+  private mfaToken?: string;
+  private accessToken?: AccessToken;
   private archiveId?: number;
   private archiveNbr?: string;
 
@@ -31,21 +46,34 @@ export class Permanent {
 
   public archiveStore = new ArchiveStore();
   constructor(config: PermanentConstructorConfigI) {
-    const { sessionToken, mfaToken, archiveId, archiveNbr, baseUrl } = config;
+    Joi.assert(
+      config,
+      schema,
+      '@permanentorg/node-sdk: Invalid configuration',
+      { abortEarly: false }
+    );
 
-    if (!sessionToken) {
-      throw new PermSdkError('Missing sessionToken in config');
+    const { archiveId, archiveNbr, baseUrl } = config;
+
+    /* eslint-disable @typescript-eslint/no-non-null-assertion --
+     * Joi is ensuring that the authentication credentials are well-formed,
+     * and doing so in TypeScript is redundant and less effective. */
+    if ('sessionToken' in config) {
+      this.sessionToken = config.sessionToken;
+      this.mfaToken = config.mfaToken;
+      this.api = ApiService.fromSession(
+        config.sessionToken!,
+        config.mfaToken!,
+        baseUrl
+      );
+    } else {
+      this.accessToken = config.accessToken!;
+      this.api = ApiService.fromToken(this.accessToken, baseUrl);
     }
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
-    if (!mfaToken) {
-      throw new PermSdkError('Missing mfaToken in config');
-    }
-
-    this.sessionToken = sessionToken;
-    this.mfaToken = mfaToken;
     this.archiveId = archiveId;
     this.archiveNbr = archiveNbr;
-    this.api = new ApiService(sessionToken, mfaToken, baseUrl);
     this.folder = new FolderResource(this.api, this.archiveStore);
     this.record = new RecordResource(this.api, this.archiveStore);
     this.item = new ItemResource(this.folder, this.record);
@@ -69,6 +97,10 @@ export class Permanent {
 
   public getMfaToken() {
     return this.mfaToken;
+  }
+
+  public getAccessToken() {
+    return this.accessToken;
   }
 
   public getArchiveNbr() {

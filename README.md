@@ -8,23 +8,52 @@ Built on [bitjson/typescript-starter](https://github.com/bitjson/typescript-star
 
 ## Usage
 
-The client needs to be configured with authentication tokens.
+The client needs to be configured with client credentials.
 Please contact engineers@permanent.org for access.
 
 ```js
 // ES import
-import { Permanent } from '@permanentorg/node-sdk';
+import { PermanentOAuthClient } from '@permanentorg/node-sdk';
 
 // CommonJS
-const Permanent = require('@permanentorg/node-sdk').Permanent;
+const Permanent = require('@permanentorg/node-sdk').PermanentOAuthClient;
 
 // Configure with credentials
-const permanent = new Permanent({
-  sessionToken,
-  mfaToken,
-  archiveNbr,
+const client = new PermanentOAuthClient(
+  clientId,
+  clientSecret,
   baseUrl, // optional, defaults to prod environment URL
+  authHost, // optional, defaults to prod environment URL
 });
+
+// start OAuth flow, eg in response to user clicking login button
+// using express in this example
+router.get('/permanent/auth', async (req: Request, res: Response) => {
+  res.redirect(client.authorizeUrl(
+    `${req.protocol}://${req.get('host')}/permanent/callback`,
+    '', // scope; may be an empty string or 'offline_access'
+    'state',
+  ));
+});
+
+// complete OAuth flow in response to the IdP redirecting the user back
+// using express in this example
+router.get('/permanent/callback', async (req: Request, res: Response) => {
+  const { code, state } = req.query;
+  const token = await client.completeAuthorization(
+    `${req.protocol}://${req.get('host')}/permanent/callback`,
+    code as string,
+    '', // scope; must match scope specified in `authorizeUrl`
+    state as string,
+  );
+  save(token); // application-specific
+});
+
+// load a previously-serialized token into a working object
+const token = client.loadToken(tokenStr);
+
+// use the token to create the Permanent instance
+client.clientFromToken(token);
 
 // initialize client and session
 await permanent.init();
