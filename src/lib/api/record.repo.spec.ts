@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import axios from 'axios';
 import * as sinon from 'sinon';
 
@@ -12,7 +12,7 @@ import {
 import { CsrfStore } from './csrf';
 import { RecordRepo } from './record.repo';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   recordRepo: RecordRepo;
   csrfStore: CsrfStore;
 }>;

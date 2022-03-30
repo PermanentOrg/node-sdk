@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
@@ -9,7 +9,7 @@ import { ShareByUrlVO } from '../model';
 
 import { ShareResource } from './share.resource';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   share: ShareResource;
   api: ApiService;
 }>;
@@ -135,7 +135,7 @@ test('should throw error on unsuccessful record share link response', async (t) 
   );
 
   t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes(errorMessage));
+  t.assert(error !== undefined && error.message.includes(errorMessage));
 });
 
 test('should return the new share URL on successful folder share link response', async (t) => {
@@ -246,7 +246,7 @@ test('should throw error on unsuccessful folder share link response', async (t) 
   );
 
   t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes(errorMessage));
+  t.assert(error !== undefined && error.message.includes(errorMessage));
 });
 
 test('should set proper values on vo from update share booleans', async (t) => {

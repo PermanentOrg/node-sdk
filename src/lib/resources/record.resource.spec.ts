@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
@@ -8,7 +8,7 @@ import { PermSdkError } from '../error';
 import { ArchiveStore } from './archive';
 import { RecordResource } from './record.resource';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   record: RecordResource;
   api: ApiService;
   archiveStore: ArchiveStore;
@@ -178,7 +178,7 @@ test('should throw error on unsuccessful response', async (t) => {
   );
 
   t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes(errorMessage));
+  t.assert(error !== undefined && error.message.includes(errorMessage));
 });
 
 test('should return specified record', async (t) => {

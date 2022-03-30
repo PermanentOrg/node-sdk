@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -7,7 +7,7 @@ import { PermanentApiRequestData } from '../model';
 import { BaseRepo, PermanentApiRequest } from './base.repo';
 import { CsrfStore } from './csrf';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   baseRepo: BaseRepo;
   csrfStore: CsrfStore;
   mockAxios: MockAdapter;

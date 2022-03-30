@@ -1,9 +1,9 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import MockAdapter from 'axios-mock-adapter';
 
 import { ApiService, MFA_COOKIE, SESSION_COOKIE } from './api.service';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   apiService: ApiService;
   mockAxios: MockAdapter;
 }>;

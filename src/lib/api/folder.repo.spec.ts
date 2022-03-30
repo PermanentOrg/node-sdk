@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import axios from 'axios';
 import * as sinon from 'sinon';
 
@@ -7,7 +7,7 @@ import { FolderVO, PermanentApiRequestData } from '../model';
 import { CsrfStore } from './csrf';
 import { FolderRepo } from './folder.repo';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   folderRepo: FolderRepo;
   csrfStore: CsrfStore;
 }>;

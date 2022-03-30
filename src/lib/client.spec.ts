@@ -1,9 +1,9 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import { AuthorizationCode } from 'simple-oauth2';
 
 import { Permanent, PermanentConstructorConfigI } from './client';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   options: PermanentConstructorConfigI;
 }>;
 
@@ -36,7 +36,7 @@ test('throws error for missing sessionToken', async (t) => {
     } as unknown) as PermanentConstructorConfigI);
   });
 
-  t.assert(error.message.includes('sessionToken'));
+  t.assert(error !== undefined && error.message.includes('sessionToken'));
 });
 
 test('throws error for missing mfaToken', async (t) => {
@@ -47,7 +47,7 @@ test('throws error for missing mfaToken', async (t) => {
     } as unknown) as PermanentConstructorConfigI);
   });
 
-  t.assert(error.message.includes('mfaToken'));
+  t.assert(error !== undefined && error.message.includes('mfaToken'));
 });
 
 test('throws error for missing authentication', async (t) => {
@@ -55,9 +55,9 @@ test('throws error for missing authentication', async (t) => {
     new Permanent({});
   });
 
-  t.assert(error.message.includes('at least one of'));
-  t.assert(error.message.includes('accessToken'));
-  t.assert(error.message.includes('sessionToken'));
+  t.assert(error !== undefined && error.message.includes('at least one of'));
+  t.assert(error !== undefined && error.message.includes('accessToken'));
+  t.assert(error !== undefined && error.message.includes('sessionToken'));
 });
 
 test('works with an access token', async (t) => {

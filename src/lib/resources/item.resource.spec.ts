@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
@@ -9,7 +9,7 @@ import { FolderResource } from './folder.resource';
 import { ItemResource } from './item.resource';
 import { RecordResource } from './record.resource';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   api: ApiService;
   archiveStore: ArchiveStore;
   folder: FolderResource;
