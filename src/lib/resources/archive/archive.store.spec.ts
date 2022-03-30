@@ -1,11 +1,11 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 
 import { PermSdkError } from '../../error';
 import { FolderVO } from '../../model';
 
 import { ArchiveStore } from '.';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   archiveStore: ArchiveStore;
 }>;
 
@@ -54,6 +54,6 @@ test('throws error if getPrivateRoot called before init()', (t) => {
     t.context.archiveStore.getPrivateRoot();
   });
 
-  t.assert(error.message.includes('init'));
+  t.assert(error !== undefined && error.message.includes('init'));
   t.assert(error instanceof PermSdkError);
 });

@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
@@ -9,7 +9,7 @@ import { FolderVO } from '../model';
 import { ArchiveStore } from './archive';
 import { FolderResource } from './folder.resource';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   folder: FolderResource;
   api: ApiService;
   archiveStore: ArchiveStore;
@@ -136,5 +136,5 @@ test('should throw error on unsuccessful response', async (t) => {
   );
 
   t.assert(error instanceof PermSdkError);
-  t.assert(error.message.includes(errorMessage));
+  t.assert(error !== undefined && error.message.includes(errorMessage));
 });

@@ -1,11 +1,11 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import axios from 'axios';
 import * as sinon from 'sinon';
 
 import { AuthRepo } from './auth.repo';
 import { CsrfStore } from './csrf';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   authRepo: AuthRepo;
   csrfStore: CsrfStore;
 }>;

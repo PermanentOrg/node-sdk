@@ -1,4 +1,4 @@
-import anyTest, { TestInterface } from 'ava';
+import anyTest, { TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 import { ApiService } from '../api/api.service';
@@ -8,7 +8,7 @@ import { PermSdkError } from '../error';
 import { ArchiveStore } from './archive';
 import { SessionResource } from './session.resource';
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
   session: SessionResource;
   api: ApiService;
   archiveStore: ArchiveStore;
@@ -201,7 +201,7 @@ test('throw error on change if failed request', async (t) => {
   sinon.replace(t.context.api.archive, 'change', responseFake);
 
   const error = await t.throwsAsync(t.context.session.useArchive(archiveNbr));
-  t.assert(error.message.includes(archiveNbr));
+  t.assert(error !== undefined && error.message.includes(archiveNbr));
 });
 
 test('throw error on change if failed getRoot request', async (t) => {
@@ -243,6 +243,6 @@ test('throw error on change if failed getRoot request', async (t) => {
   sinon.replace(t.context.api.folder, 'getRoot', getRootResponseFake);
 
   const error = await t.throwsAsync(t.context.session.useArchive(archiveNbr));
-  t.assert(error.message.includes('root'));
-  t.assert(error.message.includes(archiveNbr));
+  t.assert(error !== undefined && error.message.includes('root'));
+  t.assert(error !== undefined && error.message.includes(archiveNbr));
 });
