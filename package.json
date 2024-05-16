@@ -6,7 +6,7 @@
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
   "repository": "https://github.com/PermanentOrg/node-sdk",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "keywords": [],
   "scripts": {
     "build": "run-p build:*",
